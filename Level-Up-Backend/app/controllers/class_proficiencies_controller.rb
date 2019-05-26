@@ -1,0 +1,2 @@
+class ClassProficienciesController < ApplicationController
+end

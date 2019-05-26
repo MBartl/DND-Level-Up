@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  char_classes: one
+  flavor: MyString
+  desc: MyText
+
+two:
+  name: MyString
+  char_classes: two
+  flavor: MyString
+  desc: MyText

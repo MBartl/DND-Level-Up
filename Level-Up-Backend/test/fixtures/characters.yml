@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  level: 1
+  bio: MyText
+  ability_score: 
+  race: one
+  char_class: one
+  subclass: one
+  campaign: one
+  equipment: MyText
+
+two:
+  name: MyString
+  level: 1
+  bio: MyText
+  ability_score: 
+  race: two
+  char_class: two
+  subclass: two
+  campaign: two
+  equipment: MyText

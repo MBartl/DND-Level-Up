@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  type: 
+  name: MyString
+  race_proficiencies: 
+  class_proficiencies: 
+
+two:
+  type: 
+  name: MyString
+  race_proficiencies: 
+  class_proficiencies: 

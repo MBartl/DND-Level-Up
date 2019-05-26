@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  char_class: one
+  subclass: one
+  spell: one
+
+two:
+  char_class: two
+  subclass: two
+  spell: two

@@ -1,0 +1,2 @@
+class CharClassesController < ApplicationController
+end
