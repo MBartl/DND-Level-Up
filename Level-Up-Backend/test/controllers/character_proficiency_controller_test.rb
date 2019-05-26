@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CharacterSpellsControllerTest < ActionDispatch::IntegrationTest
+class CharacterProficiencyControllerTest < ActionDispatch::IntegrationTest
   # test "the truth" do
   #   assert true
   # end

@@ -1,0 +1,2 @@
+class CharacterProficiencyController < ApplicationController
+end

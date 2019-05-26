@@ -7,7 +7,6 @@ class CreateAbilityScores < ActiveRecord::Migration[5.2]
       t.integer :intelligence
       t.integer :wisdom
       t.integer :charisma
-      t.belongs_to :character, foreign_key: true
 
       t.timestamps
     end
