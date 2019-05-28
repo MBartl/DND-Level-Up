@@ -4,7 +4,7 @@ one:
   name: MyString
   level: 1
   bio: MyText
-  ability_score: 
+  ability_score: one
   race: one
   char_class: one
   subclass: one
@@ -15,7 +15,7 @@ two:
   name: MyString
   level: 1
   bio: MyText
-  ability_score: 
+  ability_score: two
   race: two
   char_class: two
   subclass: two

@@ -1,8 +1,8 @@
 //on page load, menu is populated with current campaigns
 document.addEventListener("DOMContentLoaded", function() {
-  fetch("http://localhost:3000/campaigns")
-    .then(resp => resp.json())
-    .then(allCampaigns => allCampaigns.forEach(addCampaignToMenu))
+  fetch("http://localhost:3000/api/v1/campaigns")
+  .then(resp => resp.json())
+  .then(allCampaigns => allCampaigns.forEach(addCampaignToMenu))
 
   //add event listener to the New Campaign button that creates a new camapaign
   const newCampaignButton = document.getElementById("new-campaign-button")
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
 })
 
 function listCampaigns() {
-
+  debugger
 }
 
 function addCampaignToMenu(campaign) {
@@ -46,24 +46,22 @@ function addCampaignToMenu(campaign) {
 }
 
 function createCampaign() {
-  const headerDiv = document.getElementById("head-frame")
-
-
+  const body = document.querySelector("#body")
   const createCampaignForm = document.createElement("form")
   createCampaignForm.class = "ui form"
   createCampaignForm.id = "create-campaign-form"
-  createCampaignForm.innerHTML = `<div class="field">
-    <label>Title</label>
-    <input type="text" name="campaign-name">
+  createCampaignForm.innerHTML = `
+  <div class="field">
+    <label>Title</label><br>
+    <input type="text" name="campaign-name" style="width: 300px;"><br><br>
 
-    <label>Short Text</label>
-    <textarea rows="2" name="campaign-description" form="create-campaign-form"></textarea>
-
+    <label>Summary</label><br>
+    <textarea rows="2" name="campaign-description" form="create-campaign-form" style="height: 250px; width: 300px;"></textarea>
+    <br><br>
     <input type="submit" value="Submit">
+  </div>`
 
-    </div>`
-
-  headerDiv.appendChild(createCampaignForm)
+  body.appendChild(createCampaignForm)
   createCampaignForm.addEventListener("submit", function() {
     event.preventDefault()
     const campaignNameInput = this.querySelector('input[name="campaign-name"]').value
@@ -76,7 +74,6 @@ function createCampaign() {
 }
 
 function createCampaignInstance(name, desc) {
-
   clearForm();
 
   let configObj = {
@@ -124,7 +121,7 @@ function editCampaign(campaign) {
   campaignCharactersList.className = "ul list"
   document.body.appendChild(campaignCharactersList)
 
-  fetch("http://localhost:3000/characters")
+  fetch("http://localhost:3000/api/v1/characters")
     .then(resp => resp.json())
     .then(allCharacters => allCharacters.forEach(listCharacter))
 

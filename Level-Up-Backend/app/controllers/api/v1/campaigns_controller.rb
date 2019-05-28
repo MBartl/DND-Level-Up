@@ -13,6 +13,11 @@ class Api::V1::CampaignsController < ApplicationController
     end
   end
 
+  # def show
+  #   @campaign = Campaign.find(params[:id])
+  #   $campaignId = @campaign.id
+  # end
+
   private
   def campaign_params
     params.require(:campaign).permit(:name, :plot_notes)
