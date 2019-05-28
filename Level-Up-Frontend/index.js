@@ -140,7 +140,12 @@ function editCampaign(campaign) {
   newCampaignCharacter.addEventListener("click", newCharacter)
 }
 
+<<<<<<< HEAD
+function listCharacter(character){
+  console.log(character)
+=======
 function listCharacter(character) {
+>>>>>>> 4255bf2dee307a6fd8819404bee983aa626ccb19
   const campaignCharactersList = document.getElementById("campaign-characters-list")
 
   const campaignCharacter = document.createElement("div")

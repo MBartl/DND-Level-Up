@@ -12,4 +12,8 @@ class Character < ApplicationRecord
 
   has_many :character_spells, dependent: :destroy
   has_many :spells, through: :character_spells
+
+  def self.filter_campaign_characters(campaign)
+    Character.all.select{|character| character.campaign == campaign }
+  end
 end
