@@ -1,5 +1,4 @@
-class CampaignsController < ApplicationController
-
+class Api::V1::CampaignsController < ApplicationController
   def index
     @campaigns = Campaign.all
     render json: @campaigns
@@ -12,6 +11,11 @@ class CampaignsController < ApplicationController
     else
       render :new
     end
+  end
+
+  private
+  def campaign_params
+    params.require(:campaign).permit(:name, :plot_notes)
   end
 end
 

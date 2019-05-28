@@ -1,2 +1,0 @@
-class ProficienciesController < ApplicationController
-end

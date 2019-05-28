@@ -1,9 +1,8 @@
-
 //on page load, menu is populated with current campaigns
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", function() {
   fetch("http://localhost:3000/campaigns")
-  .then(resp => resp.json())
-  .then(allCampaigns => allCampaigns.forEach(addCampaignToMenu))
+    .then(resp => resp.json())
+    .then(allCampaigns => allCampaigns.forEach(addCampaignToMenu))
 
   //add event listener to the New Campaign button that creates a new camapaign
   const newCampaignButton = document.getElementById("new-campaign-button")
@@ -13,40 +12,40 @@ document.addEventListener("DOMContentLoaded", function(){
   existingCampaignsButton.addEventListener("click", listCampaigns)
 })
 
-function listCampaigns(){
+function listCampaigns() {
 
 }
 
-function addCampaignToMenu(campaign){
+function addCampaignToMenu(campaign) {
   const campaignsHeader = document.getElementById("current-campaigns")
   const campaignDiv = document.createElement("div")
   campaignDiv.class = "ui items"
 
-  campaignDiv.innerHTML = `<div class="ui small image">
-      <img src="">
+  campaignDiv.innerHTML = `
+  <div class="ui small image">
+    <img src="">
+  </div>
+  <div class="content">
+    <div class="header">${campaign.name}</div>
+    <div class="meta"></div>
+    <div class="description">
+      <p>${campaign.plot_notes}</p>
     </div>
-    <div class="content">
-      <div class="header">${campaign.name}</div>
-      <div class="meta">
-      </div>
-      <div class="description">
-        <p>${campaign.plot_notes}</p>
-      </div>
-    </div>`
+  </div>`
 
-    const editCampaignButton = document.createElement("button")
-    editCampaignButton.className = "ui button"
-    editCampaignButton.innerText = "Edit This Campaign"
-    editCampaignButton.addEventListener("click", function(){
-      editCampaign(campaign)
-    })
+  const editCampaignButton = document.createElement("button")
+  editCampaignButton.className = "ui button"
+  editCampaignButton.innerText = "Edit This Campaign"
+  editCampaignButton.addEventListener("click", function() {
+    editCampaign(campaign)
+  })
 
   campaignsHeader.appendChild(campaignDiv)
   campaignDiv.appendChild(editCampaignButton)
 
 }
 
-function createCampaign(){
+function createCampaign() {
   const headerDiv = document.getElementById("head-frame")
 
 
@@ -65,7 +64,7 @@ function createCampaign(){
     </div>`
 
   headerDiv.appendChild(createCampaignForm)
-  createCampaignForm.addEventListener("submit", function(){
+  createCampaignForm.addEventListener("submit", function() {
     event.preventDefault()
     const campaignNameInput = this.querySelector('input[name="campaign-name"]').value
     const campaignDescriptionInput = this.querySelector('textarea[name="campaign-description"]').value
@@ -76,38 +75,38 @@ function createCampaign(){
   })
 }
 
-function createCampaignInstance(name, desc){
+function createCampaignInstance(name, desc) {
 
   clearForm();
 
   let configObj = {
     method: "POST",
     headers: {
-      "Content-Type":`application/json`,
-      "Accept":`application/json`
+      "Content-Type": `application/json`,
+      "Accept": `application/json`
     },
     body: JSON.stringify({
-      "name":`${name}`,
+      "name": `${name}`,
       "plot_notes": `${desc}`
     }),
   }
 
   fetch("http://localhost:3000/campaigns", configObj)
-  .then(resp => resp.json())
-  .then(campaign => addCampaignToMenu(campaign))
+    .then(resp => resp.json())
+    .then(campaign => addCampaignToMenu(campaign))
 }
 
-function clearForm(){
+function clearForm() {
   const campaignForm = document.getElementById("create-campaign-form")
-  while (campaignForm.firstChild){
+  while (campaignForm.firstChild) {
     campaignForm.removeChild(campaignForm.firstChild)
   }
 }
 
-function clearCampaigns(){
+function clearCampaigns() {
   const campaignList = document.getElementById("current-campaigns")
   console.log(campaignList)
-  while (campaignList.firstChild){
+  while (campaignList.firstChild) {
     campaignList.removeChild(campaignList.firstChild)
   }
   campaignList.remove()
@@ -117,7 +116,7 @@ function clearCampaigns(){
 
 
 /////////////// Start of Individual Campaign related functions //
-function editCampaign(campaign){
+function editCampaign(campaign) {
   clearCampaigns();
 
   const campaignCharactersList = document.createElement("ul")
@@ -126,8 +125,8 @@ function editCampaign(campaign){
   document.body.appendChild(campaignCharactersList)
 
   fetch("http://localhost:3000/characters")
-  .then(resp => resp.json())
-  .then(allCharacters => allCharacters.forEach(listCharacter))
+    .then(resp => resp.json())
+    .then(allCharacters => allCharacters.forEach(listCharacter))
 
   //when hooking this up the backend, it will be necessary to write a
   //filter that uses the campaign object that's been passed in to find
@@ -141,8 +140,12 @@ function editCampaign(campaign){
   newCampaignCharacter.addEventListener("click", newCharacter)
 }
 
+<<<<<<< HEAD
 function listCharacter(character){
   console.log(character)
+=======
+function listCharacter(character) {
+>>>>>>> 4255bf2dee307a6fd8819404bee983aa626ccb19
   const campaignCharactersList = document.getElementById("campaign-characters-list")
 
   const campaignCharacter = document.createElement("div")
@@ -160,15 +163,15 @@ function listCharacter(character){
   campaignCharactersList.appendChild(campaignCharacter)
   campaignCharacter.appendChild(viewCampaignCharacter)
 
-  viewCampaignCharacter.addEventListener("click", function(){
+  viewCampaignCharacter.addEventListener("click", function() {
     viewCharacter(character)
   })
 }
 
-function clearCharacters(){
+function clearCharacters() {
   const campaignCharactersList = document.getElementById("campaign-characters-list")
 
-  while (campaignCharactersList.firstChild){
+  while (campaignCharactersList.firstChild) {
     campaignCharactersList.removeChild(campaignCharactersList.firstChild)
   }
   campaignCharactersList.remove()
@@ -178,7 +181,7 @@ function clearCharacters(){
 
 ///////////Display Character Sheet Related Functions///////////
 
-function viewCharacter(character){
+function viewCharacter(character) {
   clearCharacters()
 
   const characterSheet = document.createElement("div")
@@ -187,13 +190,13 @@ function viewCharacter(character){
   // const characterAbility
 }
 
-function getCharacterAbilityScores(character){
+function getCharacterAbilityScores(character) {
 
   fetch("http://localhost:3000/routeTBD")
-  .then(resp => resp.json())
-  .then(scores => listScores(scores))
+    .then(resp => resp.json())
+    .then(scores => listScores(scores))
 
-  function listScores(scores){
+  function listScores(scores) {
     const abilityScoresUl = document.createElement("ul")
 
   }
@@ -201,7 +204,7 @@ function getCharacterAbilityScores(character){
 
 ///////
 
-function newCharacter(){
+function newCharacter() {
   clearCharacters()
 
 

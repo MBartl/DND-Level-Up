@@ -1,2 +1,0 @@
-class RaceTraitsController < ApplicationController
-end
