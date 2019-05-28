@@ -1,5 +1,6 @@
 class Api::V1::CampaignSerializer < ActiveModel::Serializer
-  attributes :id
+  attributes :id, :name, :plot_notes
+  
 
   def index
     @campaigns = Campaign.all

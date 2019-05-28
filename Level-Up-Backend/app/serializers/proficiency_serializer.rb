@@ -1,3 +1,5 @@
 class ProficiencySerializer < ActiveModel::Serializer
-  attributes :id
+  attributes :id, :category, :name
+
+  has_many :characters
 end
