@@ -1,19 +1,28 @@
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>Module 3 Project</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css" />
+  <head>
+    <meta charset="UTF-8">
+    <title>Level Up</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css" />
+  </head>
 
-</head>
-<body>
-  <div class="ui segment" id="head-frame">
+  <body>
+  <div class="ui segment" id="head-frame" style="height: 6rem;">
     <h2 class="ui right floated header">Level Up</h2>
     <button class="ui button" id="new-campaign-button"> New Campaign</button>
     <button class="ui button" id="existing-campaigns-button">Existing Campaigns</button>
-    <div class="ui clearing divider"></div>
-    <p></p>
   </div>
-  <h3 class="ui header" id="current-campaigns">Current Campaigns</h3>
-</body>
-<script src="index.js"></script>
+  <div class="ui visible sidebar inverted vertical menu" style="margin-top:6rem!important; width:12rem;">
+    <a class="item">
+      Current Campaign
+    </a>
+    <a class="item">
+      Characters
+    </a>
+    <a class="item">
+      Compendium
+    </a>
+  </div>
+  <div id="body" style="margin-left: 14rem;"></div>
+  </body>
+  <script src="index.js"></script>
 </html>
