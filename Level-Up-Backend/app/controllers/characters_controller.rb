@@ -2,6 +2,7 @@ class CharactersController < ApplicationController
 
   def index
     @characters = Character.all
+    render json: @characters
   end
 
   def campaign_index
@@ -19,7 +20,7 @@ class CharactersController < ApplicationController
   end
 
   def show
-      @campaign = Character.find(params[:id])
+      @character = Character.find(params[:id])
       render json: @character
   end
 end

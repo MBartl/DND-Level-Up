@@ -142,6 +142,7 @@ function editCampaign(campaign){
 }
 
 function listCharacter(character){
+  console.log(character)
   const campaignCharactersList = document.getElementById("campaign-characters-list")
 
   const campaignCharacter = document.createElement("div")
