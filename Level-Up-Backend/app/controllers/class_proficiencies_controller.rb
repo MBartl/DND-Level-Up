@@ -1,2 +1,0 @@
-class ClassProficienciesController < ApplicationController
-end

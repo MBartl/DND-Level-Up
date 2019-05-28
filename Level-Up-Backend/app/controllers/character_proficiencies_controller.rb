@@ -1,2 +1,0 @@
-class CharacterProficienciesController < ApplicationController
-end

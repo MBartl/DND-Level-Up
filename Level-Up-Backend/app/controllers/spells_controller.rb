@@ -1,2 +1,0 @@
-class SpellsController < ApplicationController
-end

@@ -3,9 +3,14 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.1'
 
+# Seralize models
+gem 'active_model_serializers'
+# Don't cry use pry
 gem 'pry'
+# Getting data from D&D API
 gem 'json'
 gem 'rest-client'
+# For clean resets
 gem 'activerecord-reset-pk-sequence'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.3'
