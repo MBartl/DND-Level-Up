@@ -7,10 +7,16 @@ class Api::V1::CampaignsController < ApplicationController
   def create
     @campaign = Campaign.new(campaign_params)
     if @campaign.save
-      redirect_to @campaign
+      render json: @campaign
     else
       render :new
     end
+  end
+
+  def show
+    @campaign = Campaign.all.find(params[:id])
+    $campaignId = params[:id]
+    byebug
   end
 
   # def show

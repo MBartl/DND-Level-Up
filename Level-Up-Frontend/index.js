@@ -1,107 +1,125 @@
-//on page load, menu is populated with current campaigns
-document.addEventListener("DOMContentLoaded", function() {
-  fetch("http://localhost:3000/api/v1/campaigns")
-  .then(resp => resp.json())
-  .then(allCampaigns => allCampaigns.forEach(addCampaignToMenu))
+const URL = 'http://localhost:3000/api/v1'
+const body = document.querySelector('#body')
 
-  //add event listener to the New Campaign button that creates a new camapaign
-  const newCampaignButton = document.getElementById("new-campaign-button")
-  newCampaignButton.addEventListener("click", createCampaign)
+const newCampaignButton = document.getElementById('new-campaign-button')
+newCampaignButton.addEventListener('click', createCampaign)
 
-  const existingCampaignsButton = document.getElementById("existing-campaigns-button")
-  existingCampaignsButton.addEventListener("click", listCampaigns)
-})
+const existingCampaignsButton = document.getElementById('existing-campaigns-button')
+existingCampaignsButton.addEventListener('click', listCampaigns)
+
 
 function listCampaigns() {
-  debugger
+  fetch(URL + '/campaigns')
+  .then(resp => resp.json())
+  .then(allCampaigns => {
+    debugger
+    allCampaigns.forEach(listEachCampaign)})
 }
 
-function addCampaignToMenu(campaign) {
-  const campaignsHeader = document.getElementById("current-campaigns")
-  const campaignDiv = document.createElement("div")
-  campaignDiv.class = "ui items"
+
+function listEachCampaign(campaign) {
+  const body = document.getElementById('body')
+  const campaignDiv = document.createElement('div')
+  campaignDiv.className = 'ui items'
 
   campaignDiv.innerHTML = `
-  <div class="ui small image">
-    <img src="">
+  <div class='ui small image'>
+    <img src=''>
   </div>
-  <div class="content">
-    <div class="header">${campaign.name}</div>
-    <div class="meta"></div>
-    <div class="description">
+  <div class='content'>
+    <div class='header'>${campaign.name}</div>
+    <div class='meta'></div>
+    <div class='description'>
       <p>${campaign.plot_notes}</p>
     </div>
   </div>`
 
-  const editCampaignButton = document.createElement("button")
-  editCampaignButton.className = "ui button"
-  editCampaignButton.innerText = "Edit This Campaign"
-  editCampaignButton.addEventListener("click", function() {
+  const editCampaignButton = document.createElement('button')
+  editCampaignButton.className = 'ui button'
+  editCampaignButton.innerText = 'Edit This Campaign'
+  editCampaignButton.addEventListener('click', function() {
     editCampaign(campaign)
   })
 
-  campaignsHeader.appendChild(campaignDiv)
+  body.appendChild(campaignDiv)
   campaignDiv.appendChild(editCampaignButton)
-
 }
+
 
 function createCampaign() {
-  const body = document.querySelector("#body")
-  const createCampaignForm = document.createElement("form")
-  createCampaignForm.class = "ui form"
-  createCampaignForm.id = "create-campaign-form"
-  createCampaignForm.innerHTML = `
-  <div class="field">
-    <label>Title</label><br>
-    <input type="text" name="campaign-name" style="width: 300px;"><br><br>
+  let campaignForm
+  if (!(body.firstChild.id == "campaign-form")) {
+    clearBody()
+    createCampaignForm()
+    campaignForm = document.querySelector('form')
+    campaignForm.addEventListener('submit', function() {
+      event.preventDefault()
+      const campaignNameInput = this.querySelector('input[name="campaign-name"]').value
+      const plotNotesInput = this.querySelector('textarea[name="campaign-description"]').value
 
-    <label>Summary</label><br>
-    <textarea rows="2" name="campaign-description" form="create-campaign-form" style="height: 250px; width: 300px;"></textarea>
-    <br><br>
-    <input type="submit" value="Submit">
-  </div>`
-
-  body.appendChild(createCampaignForm)
-  createCampaignForm.addEventListener("submit", function() {
-    event.preventDefault()
-    const campaignNameInput = this.querySelector('input[name="campaign-name"]').value
-    const campaignDescriptionInput = this.querySelector('textarea[name="campaign-description"]').value
-
-
-
-    createCampaignInstance(campaignNameInput, campaignDescriptionInput)
-  })
+      createCampaignInstance(campaignNameInput, plotNotesInput)
+    })
+  }
+  else {
+    campaignForm = document.querySelector('form')
+    campaignForm.hidden == true ? campaignForm.hidden = false : campaignForm.hidden = true
+  }
 }
 
-function createCampaignInstance(name, desc) {
+
+function createCampaignForm() {
+  campaignForm = document.createElement('form')
+  body.appendChild(campaignForm)
+  campaignForm.className = 'ui form'
+  campaignForm.id = 'campaign-form'
+
+  campaignForm.innerHTML = `
+    <div class='field'>
+      <label>Title</label><br>
+      <input type='text' name='campaign-name' style='width: 300px;'><br><br>
+
+      <label>Summary</label><br>
+      <textarea rows='2' name='campaign-description' form='create-campaign-form' style='height: 250px; width: 300px;'></textarea>
+      <br><br>
+      <input type='submit' value='Submit'>
+    </div>`;
+}
+
+
+function createCampaignInstance(name, plot_notes) {
   clearForm();
 
   let configObj = {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": `application/json`,
-      "Accept": `application/json`
+      'Content-Type': `application/json`,
+      'Accept': `application/json`
     },
-    body: JSON.stringify({
-      "name": `${name}`,
-      "plot_notes": `${desc}`
-    }),
+    body: JSON.stringify({name, plot_notes}),
   }
 
-  fetch("http://localhost:3000/campaigns", configObj)
+  fetch(URL + 'campaigns', configObj)
     .then(resp => resp.json())
-    .then(campaign => addCampaignToMenu(campaign))
+    .then(campaign => {
+      campaignHomePage(campaign)
+    })
 }
 
-function clearForm() {
-  const campaignForm = document.getElementById("create-campaign-form")
-  while (campaignForm.firstChild) {
-    campaignForm.removeChild(campaignForm.firstChild)
+
+function campaignHomePage(campaign) {
+
+}
+
+
+function clearBody() {
+  const body = document.getElementById('body')
+  while (body.firstChild) {
+    body.removeChild(body.firstChild)
   }
 }
 
 function clearCampaigns() {
-  const campaignList = document.getElementById("current-campaigns")
+  const campaignList = document.getElementById('current-campaigns')
   console.log(campaignList)
   while (campaignList.firstChild) {
     campaignList.removeChild(campaignList.firstChild)
@@ -116,12 +134,12 @@ function clearCampaigns() {
 function editCampaign(campaign) {
   clearCampaigns();
 
-  const campaignCharactersList = document.createElement("ul")
-  campaignCharactersList.id = "campaign-characters-list"
-  campaignCharactersList.className = "ul list"
+  const campaignCharactersList = document.createElement('ul')
+  campaignCharactersList.id = 'campaign-characters-list'
+  campaignCharactersList.className = 'ul list'
   document.body.appendChild(campaignCharactersList)
 
-  fetch("http://localhost:3000/api/v1/characters")
+  fetch(URL + '/characters')
     .then(resp => resp.json())
     .then(allCharacters => allCharacters.forEach(listCharacter))
 
@@ -129,39 +147,39 @@ function editCampaign(campaign) {
   //filter that uses the campaign object that's been passed in to find
   //the characters associated with that campaign
 
-  const newCampaignCharacter = document.createElement("button")
-  newCampaignCharacter.className = "ui button"
-  newCampaignCharacter.innerText = "Create New Character"
+  const newCampaignCharacter = document.createElement('button')
+  newCampaignCharacter.className = 'ui button'
+  newCampaignCharacter.innerText = 'Create New Character'
   campaignCharactersList.appendChild(newCampaignCharacter)
 
-  newCampaignCharacter.addEventListener("click", newCharacter)
+  newCampaignCharacter.addEventListener('click', newCharacter)
 }
 
 function listCharacter(character) {
-  const campaignCharactersList = document.getElementById("campaign-characters-list")
+  const campaignCharactersList = document.getElementById('campaign-characters-list')
 
-  const campaignCharacter = document.createElement("div")
-  campaignCharacter.className = "item"
-  campaignCharacter.innerHTML = `<img class="ui avatar image" src="">
-    <div class="content">
-      <a class="header">${character.name}</a>
-      <div class="description">${character.race} ${character.class}</div>
+  const campaignCharacter = document.createElement('div')
+  campaignCharacter.className = 'item'
+  campaignCharacter.innerHTML = `<img class='ui avatar image' src=''>
+    <div class='content'>
+      <a class='header'>${character.name}</a>
+      <div class='description'>${character.race} ${character.char_class}</div>
     </div>`
 
-  const viewCampaignCharacter = document.createElement("button")
-  viewCampaignCharacter.className = "ui button"
-  viewCampaignCharacter.innerText = "View Character Sheet"
+  const viewCampaignCharacter = document.createElement('button')
+  viewCampaignCharacter.className = 'ui button'
+  viewCampaignCharacter.innerText = 'View Character Sheet'
 
   campaignCharactersList.appendChild(campaignCharacter)
   campaignCharacter.appendChild(viewCampaignCharacter)
 
-  viewCampaignCharacter.addEventListener("click", function() {
+  viewCampaignCharacter.addEventListener('click', function() {
     viewCharacter(character)
   })
 }
 
 function clearCharacters() {
-  const campaignCharactersList = document.getElementById("campaign-characters-list")
+  const campaignCharactersList = document.getElementById('campaign-characters-list')
 
   while (campaignCharactersList.firstChild) {
     campaignCharactersList.removeChild(campaignCharactersList.firstChild)
@@ -176,7 +194,7 @@ function clearCharacters() {
 function viewCharacter(character) {
   clearCharacters()
 
-  const characterSheet = document.createElement("div")
+  const characterSheet = document.createElement('div')
   document.body.appendChild(characterSheet)
 
   // const characterAbility
@@ -184,12 +202,12 @@ function viewCharacter(character) {
 
 function getCharacterAbilityScores(character) {
 
-  fetch("http://localhost:3000/routeTBD")
+  fetch('http://localhost:3000/routeTBD')
     .then(resp => resp.json())
     .then(scores => listScores(scores))
 
   function listScores(scores) {
-    const abilityScoresUl = document.createElement("ul")
+    const abilityScoresUl = document.createElement('ul')
 
   }
 }
