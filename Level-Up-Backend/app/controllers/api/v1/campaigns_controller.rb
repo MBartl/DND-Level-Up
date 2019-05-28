@@ -29,3 +29,9 @@ class Api::V1::CampaignsController < ApplicationController
     params.require(:campaign).permit(:name, :plot_notes)
   end
 end
+
+private
+
+def campaign_params
+  params.require(:campaign).permit(:name, :plot_notes)
+end
