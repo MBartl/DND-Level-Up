@@ -7,6 +7,9 @@ tr {
 span.compendium {
   padding-left: 0.8em;
 }
+span.race.compendium{
+  padding-left: 1.6em;
+}
 .ui.button {
   padding: 1em;
 }

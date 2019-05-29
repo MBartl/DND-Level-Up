@@ -72,8 +72,56 @@ function toggleCompendium() {
   menu = document.getElementById('menu');
   menu.hidden == true ? menu.hidden = false : menu.hidden = true;
 
-
+  const compendiumMenus = menu.querySelectorAll(".item")
+  const compendiumRaceMenu = compendiumMenus[1]
+  compendiumRaceMenu.addEventListener("click", toggleRaceCompendium)
 };
+
+//toggles a submenu for races under the compendium and stashes a dataset in them to use for a fetch
+function toggleRaceCompendium(){
+  raceSubMenu = document.getElementById("race-submenu");
+  raceSubMenu.hidden == true ? raceSubMenu.hidden = false : raceSubMenu.hidden = true;
+
+  const raceSubMenuOptions = raceSubMenu.querySelectorAll(".item")
+  let counter = 1
+  while(counter <= 9){
+    raceSubMenuOptions.forEach(function(raceItem){
+      raceItem.dataset.raceId = counter
+      raceItem.addEventListener("click", function(){
+        displayRaceCompendium(raceItem.dataset.raceId)
+      })
+      counter += 1;
+    });
+  }
+}
+
+//Clears the page and fetches race data from server
+function displayRaceCompendium(raceId){
+
+  clearBody();
+
+  fetch(URL + `/races/${raceId}`)
+  .then(resp => resp.json())
+  .then(race => displayRace(race))
+
+}
+
+function displayRace(race){
+
+  // const raceShowPage = document.createElement("div")
+  // const raceShowPage.className =
+  //
+  // raceShowPage.innerHTML = `<h1>Race Name</h1>
+  // <div>Race Alignment
+  // Race Age
+  // Race Size
+  // <div>
+  // <div>Race Speed and Bonuses</div>
+  // <div>Race Traits</div>
+  // `
+  //
+  // document.body.appendChild(raceShowPage)
+}
 
 //// End of utility functions ////
 
