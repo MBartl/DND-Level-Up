@@ -3,24 +3,51 @@
     <meta charset="UTF-8">
     <title>Level Up</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css" />
+  <style media="screen">
+    body {
+      z-index: 10;
+    }
+    .ui.button {
+      padding: 1em;
+    }
+    .ui.visible.thin.sidebar {
+      margin-top:6rem!important;
+      width:12rem;
+    }
+    #header {
+      height: 6em;
+      position: fixed;
+      top: 0px;
+      right: 0px;
+      bottom: 0px;
+      left: 0px;
+      z-index: 20;
+    }
+    #body {
+      margin-top: 6em;
+    }
+  </style>
   </head>
 
   <body>
-  <div class="ui segment" id="current-campaigns" style="height: 6rem;">
+  <div class="ui segment" id="header">
     <h2 class="ui right floated header">Level Up</h2>
     <button class="ui button" id="new-campaign-button"> New Campaign</button>
-    <button class="ui button" id="existing-campaigns-button">Existing Campaigns</button>
+    <button class="ui grey button" id="existing-campaigns-button">Existing Campaigns</button>
   </div>
-  <div class="ui visible sidebar inverted vertical menu" style="margin-top:6rem!important; width:12rem;">
-    <a class="item">
+  <div class="ui visible thin sidebar inverted vertical menu">
+    <a class="item" id="current-campaign">
       Current Campaign
     </a>
-    <a class="item">
+    <a class="item" id="characters">
       Characters
     </a>
-    <a class="item">
-      Compendium
-    </a>
+    <a class="item" id="compendium">Compendium<i class="dropdown icon"></i></a>
+    <div class="menu active" id="menu" hidden=true>
+      <a class="item"><span style="padding-left: 0.8em;">Classes</span></a>
+      <a class="item"><span style="padding-left: 0.8em;">Races</span></a>
+      <a class="item"><span style="padding-left: 0.8em;">Spells</span></a>
+    </div>
   </div>
   <div id="body" style="margin-left: 14rem;">
   </div>

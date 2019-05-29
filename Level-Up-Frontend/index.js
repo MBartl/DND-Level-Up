@@ -1,51 +1,109 @@
-const URL = 'http://localhost:3000/api/v1'
-const body = document.querySelector('#body')
+const URL = 'http://localhost:3000/api/v1';
+const body = document.querySelector('#body');
 
-const newCampaignButton = document.getElementById('new-campaign-button')
-newCampaignButton.addEventListener('click', createCampaign)
+let tableCell;
+let currentCampaign;
 
-const existingCampaignsButton = document.getElementById('existing-campaigns-button')
-existingCampaignsButton.addEventListener('click', listCampaigns)
+// Add event listeners to header and sidebar
+const newCampaignButton = document.getElementById('new-campaign-button');
+newCampaignButton.addEventListener('click', createCampaign);
 
+const existingCampaignsButton = document.getElementById('existing-campaigns-button');
+existingCampaignsButton.addEventListener('click', listCampaigns);
 
+const compendiumBtn = document.getElementById('compendium');
+compendiumBtn.addEventListener('click', toggleCompendium);
+
+// Toggles compendium options
+function toggleCompendium() {
+  menu = document.getElementById('menu');
+  menu.hidden == true ? menu.hidden = false : menu.hidden = true;
+};
+
+// List of all campaigns
 function listCampaigns() {
+  tableCell = 0;
+  clearBody();
+
+  campaignTable = document.createElement('table');
+  campaignTable.id = 'campaign-table';
+  campaignTable.className = 'ui very basic collapsing celled table';
+  campaignTable.innerHTML = `<tbody></tbody>`;
+
+  addRowToTable(campaignTable);
+
+  body.appendChild(campaignTable);
+
   fetch(URL + '/campaigns')
   .then(resp => resp.json())
   .then(allCampaigns => {
-    debugger
-    allCampaigns.forEach(listEachCampaign)})
-}
+    allCampaigns.forEach(listEachCampaign)});
+};
 
-
+// Lists each campaign
 function listEachCampaign(campaign) {
-  const body = document.getElementById('body')
-  const campaignDiv = document.createElement('div')
-  campaignDiv.className = 'ui items'
+  campaignTable = document.getElementById('campaign-table')
+  if (tableCell % 3 == 0) {
+    addRowToTable(campaignTable)
+  }
+  tableCell += 1
+  currentCell = document.getElementById(`cell${tableCell}`)
+  currentCell.hidden = false
 
-  campaignDiv.innerHTML = `
-  <div class='ui small image'>
-    <img src=''>
+  div = document.createElement('div');
+  div.className = 'ui card';
+  div.id = 'campaign-list';
+  div.style = 'width: 350px;'
+  createCampaignDivHtml(div, campaign)
+
+  div.querySelector('.ui.green.button').addEventListener('click', () => campaignHomePage(campaign));
+  div.querySelector('.ui.blue.button').addEventListener('click', () => console.log(event.target));
+  div.querySelector('.ui.red.button').addEventListener('click', () => console.log(event.target));
+
+  currentCell.appendChild(div);
+};
+
+// HTML for campaign card
+function createCampaignDivHtml(div, campaign) {
+  div.innerHTML = `
+  <div class="content">
+    <div class="header">${campaign.name}</div>
   </div>
-  <div class='content'>
-    <div class='header'>${campaign.name}</div>
-    <div class='meta'></div>
-    <div class='description'>
-      <p>${campaign.plot_notes}</p>
+  <div class="extra content">
+    <h4 class="ui sub header">Summary</h4><br>
+      <div class="event">
+        <div class="content">
+          <div class="summary">
+          <form>
+          <textarea style="height: 160px; width: 320px;">
+            ${campaign.plot_notes}
+          </textarea>
+          </form>
+          </div>
+      </div>
     </div>
-  </div>`
-
-  const editCampaignButton = document.createElement('button')
-  editCampaignButton.className = 'ui button'
-  editCampaignButton.innerText = 'Edit This Campaign'
-  editCampaignButton.addEventListener('click', function() {
-    editCampaign(campaign)
-  })
-
-  body.appendChild(campaignDiv)
-  campaignDiv.appendChild(editCampaignButton)
+  </div>
+  <div class="extra content">
+    <div class="three ui buttons">
+      <button class="ui green button">Overview</button>
+      <button class="ui blue button">Save</button>
+      <button class="ui red button">Discard</button>
+    </div>
+  </div>`;
 }
 
+// Adds row when campaigns pass a multiple of 3
+function addRowToTable(campaignTable) {
+  newRow = document.createElement('tr')
+  newRow.innerHTML = `
+  <td id=cell${tableCell+1} hidden=true style="padding: 1.5em 0.8em;"></td>
+  <td id=cell${tableCell+2} hidden=true style="padding: 1.5em 0.8em;"></td>
+  <td id=cell${tableCell+3} hidden=true style="padding: 1.5em 0.8em;"></td>`;
 
+  campaignTable.firstChild.appendChild(newRow)
+}
+
+// Create a new campaign
 function createCampaign() {
   let campaignForm
   if (!(body.firstChild.id == "campaign-form")) {
@@ -66,7 +124,7 @@ function createCampaign() {
   }
 }
 
-
+// Form for new campaign
 function createCampaignForm() {
   campaignForm = document.createElement('form')
   body.appendChild(campaignForm)
@@ -74,21 +132,22 @@ function createCampaignForm() {
   campaignForm.id = 'campaign-form'
 
   campaignForm.innerHTML = `
+    <br><br>
     <div class='field'>
-      <label>Title</label><br>
+      <label>Campaign Name</label><br>
       <input type='text' name='campaign-name' style='width: 300px;'><br><br>
 
-      <label>Summary</label><br>
-      <textarea rows='2' name='campaign-description' form='create-campaign-form' style='height: 250px; width: 300px;'></textarea>
+      <label>Campaign Summary</label><br>
+      <textarea name='campaign-description' form='create-campaign-form' style='height: 250px; width: 300px;'></textarea>
       <br><br>
       <input type='submit' value='Submit'>
     </div>`;
 }
 
-
+// Send the new campaign to the database
 function createCampaignInstance(name, plot_notes) {
-  clearForm();
-
+  campaignForm = document.querySelector('form');
+  campaignForm.hidden = true;
   let configObj = {
     method: 'POST',
     headers: {
@@ -98,16 +157,16 @@ function createCampaignInstance(name, plot_notes) {
     body: JSON.stringify({name, plot_notes}),
   }
 
-  fetch(URL + 'campaigns', configObj)
+  fetch(URL + '/campaigns', configObj)
     .then(resp => resp.json())
     .then(campaign => {
       campaignHomePage(campaign)
     })
 }
 
-
+// Home page for a single campaign
 function campaignHomePage(campaign) {
-
+  debugger
 }
 
 
@@ -116,15 +175,6 @@ function clearBody() {
   while (body.firstChild) {
     body.removeChild(body.firstChild)
   }
-}
-
-function clearCampaigns() {
-  const campaignList = document.getElementById('current-campaigns')
-  console.log(campaignList)
-  while (campaignList.firstChild) {
-    campaignList.removeChild(campaignList.firstChild)
-  }
-  campaignList.remove()
 }
 
 //////////////// End of Campaign related functions //////////////
@@ -216,8 +266,5 @@ function getCharacterAbilityScores(character) {
 
 function newCharacter() {
   clearCharacters()
-
-
-
 
 }
