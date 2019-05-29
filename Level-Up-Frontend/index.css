@@ -16,6 +16,9 @@ span.compendium {
 div.ui.card.character {
   height: 180px;
 }
+span.race.compendium {
+  padding-left: 1.6em;
+}
 .ui.button {
   padding: 1em;
 }
