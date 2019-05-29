@@ -1,5 +1,3 @@
 class TraitSerializer < ActiveModel::Serializer
-  attributes :id
-
-  belongs_to :race
+  attributes :id, :name, :desc
 end
