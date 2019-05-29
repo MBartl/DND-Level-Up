@@ -1,6 +1,7 @@
 class Api::V1::CampaignsController < ApplicationController
   def index
     @campaigns = Campaign.all
+    byebug
     render json: @campaigns
   end
 
@@ -27,10 +28,4 @@ class Api::V1::CampaignsController < ApplicationController
   def campaign_params
     params.require(:campaign).permit(:name, :plot_notes)
   end
-end
-
-private
-
-def campaign_params
-  params.require(:campaign).permit(:name, :plot_notes)
 end

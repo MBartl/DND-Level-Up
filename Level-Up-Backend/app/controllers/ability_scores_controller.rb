@@ -8,10 +8,10 @@ class AbilityScoresController < ApplicationController
       render :new
     end
   end
-end
 
-private
+  private
 
-def ability_score_params
-  params.require(:ability_score).permit(:strength, :dexterity, :constitution, :intelligence, :wisdom, :charisma)
+  def ability_score_params
+    params.require(:ability_score).permit(:strength, :dexterity, :constitution, :intelligence, :wisdom, :charisma)
+  end
 end

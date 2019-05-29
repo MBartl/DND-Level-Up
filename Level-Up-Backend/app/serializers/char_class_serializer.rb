@@ -1,5 +1,5 @@
 class CharClassSerializer < ActiveModel::Serializer
-  attributes :id, :spells
+  attributes :id
 
   has_many :characters
   has_many :spells

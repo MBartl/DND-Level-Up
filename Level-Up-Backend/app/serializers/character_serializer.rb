@@ -6,7 +6,4 @@ class CharacterSerializer < ActiveModel::Serializer
   belongs_to :campaign
   belongs_to :char_class
   belongs_to :subclass
-
-  has_many :proficiencies
-  has_many :spells
 end

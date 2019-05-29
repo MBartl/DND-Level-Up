@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::API
+
   def index
     @races = Race.all
     render json: @races

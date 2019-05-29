@@ -40,19 +40,16 @@ function clearBody() {
 function scaleTextArea() {
   let tx = document.getElementsByTagName('textarea');
   let width = tx[0].style.width
-  let i = 0;
-
-  for (i; i < tx.length; i++) {
-    i = Math.ceil(i/3)
-  }
+  let i = (Math.ceil(tx.length/3));
+  i += (i-1)*2
 
   debugger
+
   for (i; i < tx.length; i++) {
     if (tx[i].style.width > width) {
       tx[i].style.width = width
     }
   }
-
   for (i; i < tx.length; i++) {
     if (tx[i].style.width > width) {
       tx[i].style.width = width
