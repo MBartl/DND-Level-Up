@@ -1,3 +1,12 @@
+// Get request for characters of one campaign
+function fetchCharacters(campaign) {
+  fetch(URL + `/campaigns/${campaign.id}`)
+  .then(resp => resp.json())
+  .then(campaignInfo => {
+    campaignInfo.characters.forEach((character) => displayCharacter(character))
+  });
+};
+
 // Display each character on campaign page
 function displayCharacter(character) {
   characterTable = document.getElementById('character-table');

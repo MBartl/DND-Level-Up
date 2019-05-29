@@ -101,7 +101,6 @@ function createCampaignForm() {
   campaignForm.id = 'campaign-form'
 
   campaignForm.innerHTML = `
-  <br><br>
   <div class='field'>
     <label>Campaign Name</label><br>
     <input type='text' name='campaign-name' style='width: 300px;'><br><br>
@@ -149,7 +148,6 @@ function campaignHomePage(campaign) {
   clearBody();
 
   body.innerHTML = `
-  <br>
   <h1>${campaign.name}</h1>
   <table class="ui table" style="width: 66%">
   <thead>
