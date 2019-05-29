@@ -10,7 +10,6 @@ class Api::V1::AbilityScoresController < ApplicationController
   end
 
   private
-
   def ability_score_params
     params.require(:ability_score).permit(:strength, :dexterity, :constitution, :intelligence, :wisdom, :charisma)
   end

@@ -23,8 +23,8 @@ class Api::V1::CharactersController < ApplicationController
     @character = Character.find(params[:id])
     render json: @character
   end
-  private
 
+  private
   def character_params
     params.require(:character).permit(:name, :bio, :level, :ability_score, :race_id, :char_class_id, :subclass_id, :campaign_id)
   end

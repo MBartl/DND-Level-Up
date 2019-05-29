@@ -4,8 +4,17 @@ body {
 tr {
   vertical-align: top;
 }
+textarea {
+  min-height: 150px;
+  max-height: 180px;
+  outline: none;
+  resize: none;
+}
 span.compendium {
   padding-left: 0.8em;
+}
+div.ui.card.character {
+  height: 180px;
 }
 .ui.button {
   padding: 1em;

@@ -3,7 +3,7 @@ const body = document.querySelector('#body');
 
 let campaignCell = 0;
 let characterCell = 0;
-let currentCampaign;
+let campaignId;
 
 // Add event listeners to header and sidebar
 const newCampaignButton = document.getElementById('new-campaign-button');
@@ -15,62 +15,75 @@ existingCampaignsButton.addEventListener('click', listCampaigns);
 const compendiumBtn = document.getElementById('compendium');
 compendiumBtn.addEventListener('click', toggleCompendium);
 
+const currentBtn = document.getElementById('current-campaign');
+currentBtn.addEventListener('click', currentCampaign);
+
 //// Utility functions ////
 
 // Adds row to table when number passes a multiple of 3
 function addRowToTable(table, cellCounter) {
-  newRow = document.createElement('tr')
+  newRow = document.createElement('tr');
   for (let i = 1; i <= 3; i++) {
     newRow.innerHTML += `
     <td id=cell${cellCounter+i} hidden=true style="padding: 1.5em 0.8em;"></td>`;
-  }
+  };
 
-  table.firstChild.appendChild(newRow)
-}
+  table.firstChild.appendChild(newRow);
+};
 
 // Function to reset body
 function clearBody() {
-  const body = document.getElementById('body')
+  const body = document.getElementById('body');
   while (body.firstChild) {
-    body.removeChild(body.firstChild)
-  }
-}
+    body.removeChild(body.firstChild);
+  };
+};
 
 // Auto scales textarea by input
 function scaleTextArea() {
   let tx = document.getElementsByTagName('textarea');
-  let width = tx[0].style.width
-  let i = (Math.ceil(tx.length/3));
-  i += (i-1)*2
+  let width = tx[0].style.width;
+  let height = 0;
+  let i;
 
-  debugger
+  //keeps i at starting value for each row of 3
+  function setValue() {
+    i = (Math.ceil(tx.length/3));
+    i += (i-1)*2-1;
+  };
 
+  //set max height
+  setValue();
   for (i; i < tx.length; i++) {
-    if (tx[i].style.width > width) {
-      tx[i].style.width = width
-    }
-  }
+    if (tx[i].scrollHeight > height) {
+      height = tx[i].scrollHeight;
+    };
+  };
+
+  //set textarea styling
+  setValue();
   for (i; i < tx.length; i++) {
-    if (tx[i].style.width > width) {
-      tx[i].style.width = width
-    }
-    tx[i].style = `height: ${tx[i].scrollHeight}px; overflow-y: hidden; width: ${width};`
+    tx[i].style = `height: ${height}px; overflow-y: hidden; width: ${width};`
     tx[i].addEventListener('input', OnInput, false);
-  }
-
+  };
   function OnInput() {
     this.style = 'height: auto; width: auto';
-    this.style = `height: ${tx[i].scrollHeight}px; overflow-y: hidden; width: ${width};`
-  }
-}
+    this.style = `height: ${height}px; overflow-y: hidden; width: ${width};`
+  };
+};
 
 // Toggles compendium options
 function toggleCompendium() {
   menu = document.getElementById('menu');
   menu.hidden == true ? menu.hidden = false : menu.hidden = true;
-
-
 };
+
+// Current Campaign button
+function currentCampaign() {
+  if (currentCampaign) {
+    currentCampaign
+  }
+}
 
 //// End of utility functions ////
 
@@ -110,7 +123,7 @@ function listEachCampaign(campaign) {
   currentCell = document.getElementById(`cell${campaignCell}`)
   currentCell.hidden = false
 
-  div = document.createElement('div');
+  let div = document.createElement('div');
   div.className = 'ui card';
   div.id = 'campaign-list';
   div.style = 'width: 350px;'
@@ -148,7 +161,7 @@ function createCampaignDivHtml(div, campaign) {
     <div class="three ui buttons">
       <button class="ui green button">Overview</button>
       <button class="ui blue button">Save</button>
-      <button class="ui red button">Discard</button>
+      <button class="ui red button">Delete</button>
     </div>
   </div>`;
 }
@@ -220,42 +233,80 @@ function createCampaignInstance(name, plot_notes) {
 
 // Home page for a single campaign
 function campaignHomePage(campaign) {
-  clearBody()
+  //sets the current campaign to last created or visited homepage
+  currentCampaign = campaign
+
+  characterCell = 0
+  campaignCell = 0;
+  clearBody();
+
   body.innerHTML = `
   <br>
   <h1>${campaign.name}</h1>
   <div class="content">
     <div class="summary">
-      <form><textarea style="width: 50%; height: 15%;">
+      <form><textarea style="width: 70%; height: 15%;">
         ${campaign.plot_notes}
       </textarea></form>
     </div>
-  </div>`;
+  </div>
+  <h3>Characters:</h3>`;
 
-  campaign.characters.forEach(displayCharacter)
+  characterTable = document.createElement('table');
+  characterTable.id = 'character-table';
+  characterTable.className = 'ui very basic collapsing celled table';
+  characterTable.innerHTML = `<tbody></tbody>`;
+
+  addRowToTable(characterTable);
+
+  body.appendChild(characterTable);
+
+  fetch(URL + `/campaigns/${campaign.id}`)
+  .then(resp => resp.json())
+  .then(campaign => {
+    campaign.characters.forEach(displayCharacter)
+  });
 }
 
 // Display each character on campaign page
 function displayCharacter(character) {
-  document.createElement('table')
+  characterTable = document.getElementById('character-table');
+  if (characterCell % 3 == 0) {
+    addRowToTable(characterTable, characterCell)
+  }
+  characterCell += 1
 
-//   <div class="ui card">
-//   <div class="content">
-//     <div class="header">Cute Dog</div>
-//     <div class="meta">
-//       <span class="right floated time">2 days ago</span>
-//       <span class="category">Animals</span>
-//     </div>
-//     <div class="description">
-//       <p></p>
-//     </div>
-//   </div>
-//   <div class="extra content">
-//     <div class="right floated author">
-//       <img class="ui avatar image" src="/images/avatar/small/matt.jpg"> Matt
-//     </div>
-//   </div>
-// </div>
+  currentCell = document.getElementById(`cell${characterCell}`)
+  currentCell.hidden = false
+
+  let div = document.createElement('div');
+  createCharacterDivHtml(div, character)
+
+  // div.querySelector('.ui.green.button').addEventListener('click', () => campaignHomePage());
+  // div.querySelector('.ui.blue.button').addEventListener('click', () => console.log(event.target));
+  // div.querySelector('.ui.red.button').addEventListener('click', () => console.log(event.target));
+
+  currentCell.appendChild(div);
+}
+
+function createCharacterDivHtml(div, character) {
+  div.className = 'ui card character';
+  div.innerHTML = `
+  <div class="content">
+    <div class="header"></div>
+    <div class="meta">
+      <span class="right floated time">${character.race.name} ${character.char_class.name}</span>
+      <span class="category">Level: ${character.level}</span>
+    </div>
+    <div class="description">
+      <p>${character.bio.length > 180 ? character.bio.slice(0, 180)+'...' : character.bio}</p>
+    </div>
+  </div>
+  <div class="extra content">
+    <div class="right floated author">
+      ${character.name}
+    </div>
+  </div>`;
 }
 
 // Edit a single campaign
