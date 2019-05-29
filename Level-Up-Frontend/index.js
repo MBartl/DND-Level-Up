@@ -18,6 +18,8 @@ compendiumBtn.addEventListener('click', toggleCompendium);
 function toggleCompendium() {
   menu = document.getElementById('menu');
   menu.hidden == true ? menu.hidden = false : menu.hidden = true;
+
+
 };
 
 // List of all campaigns
@@ -166,7 +168,7 @@ function createCampaignInstance(name, plot_notes) {
 
 // Home page for a single campaign
 function campaignHomePage(campaign) {
-  debugger
+  // debugger
 }
 
 
