@@ -118,5 +118,5 @@ p = 0
   p += 1
   ability_score = AbilityScore.create(strength: rand(9)+8, dexterity: rand(9)+8, constitution: rand(9)+9, intelligence: rand(9)+8, wisdom: rand(9)+8, charisma: rand(9)+8)
   char_class = CharClass.all.sample
-  Character.create(name: Faker::Games::WorldOfWarcraft.hero, level: rand(14)+1, bio: Faker::Books::Dune.quote, ability_score: ability_score, race: Race.all.sample, char_class: char_class, subclass: Subclass.all.find {|x| x.char_class == char_class})
+  Character.create(name: Faker::Games::WorldOfWarcraft.hero, level: rand(14)+1, bio: Faker::Books::Dune.quote, ability_score: ability_score, race: Race.all.sample, char_class: char_class, subclass: Subclass.all.find {|x| x.char_class == char_class}, campaign: Campaign.all.length > 0 ? Campaign.all.sample : nil)
 end

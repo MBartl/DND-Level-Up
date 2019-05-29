@@ -16,7 +16,6 @@ class Api::V1::CampaignsController < ApplicationController
   def show
     @campaign = Campaign.all.find(params[:id])
     $campaignId = params[:id]
-    byebug
   end
 
   # def show
