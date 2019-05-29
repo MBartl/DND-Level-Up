@@ -18,6 +18,9 @@ compendiumBtn.addEventListener('click', toggleCompendium);
 const currentBtn = document.getElementById('current-campaign');
 currentBtn.addEventListener('click', currentCampaign);
 
+const charactersBtn = document.getElementById('characters');
+charactersBtn.addEventListener('click', checkCampaignCharacters)
+
 //// Utility functions ////
 
 // Adds row to table when number passes a multiple of 3
@@ -71,6 +74,21 @@ function scaleTextArea() {
     this.style = `height: ${height}px; overflow-y: hidden; width: ${width};`
   };
 };
+
+// Current Campaign button
+function currentCampaign() {
+  if (currentCampaign) {
+    campaignHomePage(currentCampaign);
+  };
+};
+
+// Display Characters button
+function checkCampaignCharacters() {
+  if (currentCampaign) {
+    currentCampaign.characters.forEach(displayCharacter);
+  };
+};
+
 
 // Toggles compendium options
 function toggleCompendium() {
@@ -130,6 +148,15 @@ function displayRace(race){
 
 //// End of utility functions ////
 
+////        ////
+function fetchCharacters(campaign) {
+  fetch(URL + `/campaigns/${campaign.id}`)
+  .then(resp => resp.json())
+  .then(campaignInfo => {
+    campaignInfo.characters.forEach(displayCharacter)
+  });
+};
+
 
 //// Campaign functions ////
 
@@ -143,8 +170,6 @@ function listCampaigns() {
   campaignTable.id = 'campaign-table';
   campaignTable.className = 'ui very basic collapsing celled table';
   campaignTable.innerHTML = `<tbody></tbody>`;
-
-  addRowToTable(campaignTable);
 
   body.appendChild(campaignTable);
 
@@ -172,7 +197,7 @@ function listEachCampaign(campaign) {
   div.style = 'width: 350px;'
   createCampaignDivHtml(div, campaign)
 
-  div.querySelector('.ui.green.button').addEventListener('click', () => campaignHomePage(campaign));
+  div.querySelector('.ui.green.button').addEventListener('click', () => fetchCampaignDetails(campaign));
   div.querySelector('.ui.blue.button').addEventListener('click', () => console.log(event.target));
   div.querySelector('.ui.red.button').addEventListener('click', () => console.log(event.target));
 
@@ -266,13 +291,18 @@ function createCampaignInstance(name, plot_notes) {
 
   fetch(URL + '/campaigns', configObj)
     .then(resp => resp.json())
-    .then(campaign => {
-      campaignHomePage(campaign)
-    })
+    .then(campaign => campaignHomePage(campaign))
 }
 
 
 //// Start of Individual Campaign related functions ////
+
+// Fetches additional details regarding the campaign
+function fetchCampaignDetails(campaign) {
+  fetch(URL+ `/campaigns/${campaign.id}`)
+    .then(resp => resp.json())
+    .then(campaign => campaignHomePage(campaign))
+}
 
 // Home page for a single campaign
 function campaignHomePage(campaign) {
@@ -284,15 +314,20 @@ function campaignHomePage(campaign) {
   clearBody();
 
   body.innerHTML = `
-  <br>
   <h1>${campaign.name}</h1>
-  <div class="content">
-    <div class="summary">
-      <form><textarea style="width: 70%; height: 15%;">
-        ${campaign.plot_notes}
-      </textarea></form>
-    </div>
-  </div>
+  <table class="ui table" style="width: 66%">
+  <thead>
+    <tr>
+    <th class="fifteen wide" style="font-style: normal">
+      <textarea style="width: 100%; height: 12%; font-weight: normal;">${campaign.plot_notes}</textarea>
+    </th>
+    <th class="one wide">
+      <button class="ui primary button">Add Character</button>
+      <br>
+      <button class="ui button">Save Description</button></th>
+    </tr>
+  </thead>
+  </table>
   <h3>Characters:</h3>`;
 
   characterTable = document.createElement('table');
@@ -300,37 +335,38 @@ function campaignHomePage(campaign) {
   characterTable.className = 'ui very basic collapsing celled table';
   characterTable.innerHTML = `<tbody></tbody>`;
 
-  addRowToTable(characterTable);
-
   body.appendChild(characterTable);
 
-  fetch(URL + `/campaigns/${campaign.id}`)
-  .then(resp => resp.json())
-  .then(campaign => {
-    campaign.characters.forEach(displayCharacter)
-  });
+  fetchCharacters(campaign);
+  if (characterCell == campaign.characters.length-1) {
+    debugger
+  }
 }
 
 // Display each character on campaign page
 function displayCharacter(character) {
   characterTable = document.getElementById('character-table');
+  new Character(character)
   if (characterCell % 3 == 0) {
-    addRowToTable(characterTable, characterCell)
-  }
-  characterCell += 1
+    addRowToTable(characterTable, characterCell);
+  };
+  characterCell += 1;
 
-  currentCell = document.getElementById(`cell${characterCell}`)
-  currentCell.hidden = false
+  currentCell = document.getElementById(`cell${characterCell}`);
+  currentCell.hidden = false;
 
   let div = document.createElement('div');
-  createCharacterDivHtml(div, character)
+  createCharacterDivHtml(div, character);
+
+  let editBtn = div.querySelector('.ui.secondary.button');
+  editBtn.addEventListener('click', () => {console.log(character)});
 
   // div.querySelector('.ui.green.button').addEventListener('click', () => campaignHomePage());
   // div.querySelector('.ui.blue.button').addEventListener('click', () => console.log(event.target));
   // div.querySelector('.ui.red.button').addEventListener('click', () => console.log(event.target));
 
   currentCell.appendChild(div);
-}
+};
 
 function createCharacterDivHtml(div, character) {
   div.className = 'ui card character';
@@ -342,15 +378,18 @@ function createCharacterDivHtml(div, character) {
       <span class="category">Level: ${character.level}</span>
     </div>
     <div class="description">
-      <p>${character.bio.length > 180 ? character.bio.slice(0, 180)+'...' : character.bio}</p>
+      <p>${character.bio.length > 195 ? character.bio.slice(0, 195)+'...' : character.bio}</p>
     </div>
   </div>
   <div class="extra content">
+    <div class="left floated button">
+      <button class="ui secondary button">Edit</button>
+    </div>
     <div class="right floated author">
       ${character.name}
     </div>
   </div>`;
-}
+};
 
 // Edit a single campaign
 // function editCampaign(campaign) {
@@ -367,38 +406,3 @@ function createCharacterDivHtml(div, character) {
 //
 //   newCampaignCharacter.addEventListener('click', newCharacter)
 // }
-
-// List characters specific to campaign
-// function listCharacter(character) {
-//   const campaignCharactersList = document.getElementById('campaign-characters-list')
-//
-//   const campaignCharacter = document.createElement('div')
-//   campaignCharacter.className = 'item'
-//   campaignCharacter.innerHTML = `
-//   <img class='ui avatar image' src=''>
-//   <div class='content'>
-//     <a class='header'>${character.name}</a>
-//     <div class='description'>${character.race} ${character.char_class}</div>
-//   </div>`
-//
-//   const viewCampaignCharacter = document.createElement('button')
-//   viewCampaignCharacter.className = 'ui button'
-//   viewCampaignCharacter.innerText = 'View Character Sheet'
-//
-//   campaignCharactersList.appendChild(campaignCharacter)
-//   campaignCharacter.appendChild(viewCampaignCharacter)
-//
-//   viewCampaignCharacter.addEventListener('click', function() {
-//     viewCharacter(character)
-//   })
-// }
-//
-// function clearCharacters() {
-//   const campaignCharactersList = document.getElementById('campaign-characters-list')
-//
-//   while (campaignCharactersList.firstChild) {
-//     campaignCharactersList.removeChild(campaignCharactersList.firstChild)
-//   }
-//   campaignCharactersList.remove()
-// }
-//// End of Mass Character Related Functions ////
