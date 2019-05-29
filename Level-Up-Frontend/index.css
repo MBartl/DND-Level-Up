@@ -4,10 +4,19 @@ body {
 tr {
   vertical-align: top;
 }
+textarea {
+  min-height: 150px;
+  max-height: 180px;
+  outline: none;
+  resize: none;
+}
 span.compendium {
   padding-left: 0.8em;
 }
-span.race.compendium{
+div.ui.card.character {
+  height: 180px;
+}
+span.race.compendium {
   padding-left: 1.6em;
 }
 .ui.button {
