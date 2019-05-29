@@ -78,6 +78,10 @@ function toggleCompendium() {
   menu.hidden == true ? menu.hidden = false : menu.hidden = true;
 
   const compendiumMenus = menu.querySelectorAll(".item")
+
+  const compendiumClassMenu = compendiumMenus[0]
+  compendiumClassMenu.addEventListener("click", toggleClassCompendium)
+
   const compendiumRaceMenu = compendiumMenus[1]
   compendiumRaceMenu.addEventListener("click", toggleRaceCompendium)
 };
@@ -111,21 +115,72 @@ function displayRaceCompendium(raceId){
 
 }
 
+//Accepts a race object as an argument and displays its data on the page
 function displayRace(race){
 
-  // const raceShowPage = document.createElement("div")
-  // const raceShowPage.className =
-  //
-  // raceShowPage.innerHTML = `<h1>Race Name</h1>
-  // <div>Race Alignment
-  // Race Age
-  // Race Size
-  // <div>
-  // <div>Race Speed and Bonuses</div>
-  // <div>Race Traits</div>
-  // `
-  //
-  // document.body.appendChild(raceShowPage)
+  const raceShowPage = document.createElement("div")
+  raceShowPage.className = "page"
+
+  const raceHeader = document.createElement("h1")
+  raceHeader.className = "ui header center aligned"
+  raceHeader.innerText = `${race.name}`
+  raceShowPage.appendChild(raceHeader)
+
+  const raceFluff = document.createElement("div")
+  raceFluff.className = "ui piled segment"
+  raceFluff.innerHTML = `${race.alignment}<br> <br>${race.age}`
+  raceShowPage.appendChild(raceFluff)
+
+  let raceAbilityBonusArray = race.ability_bonuses
+  raceAbilityBonusArray = raceAbilityBonusArray.replace(/\D/g,"");
+  console.log(raceAbilityBonusArray[0])
+
+
+  const raceStats = document.createElement("div")
+  raceStats.className = "ui card"
+  raceStats.innerHTML = `
+  <div class="content">
+    <div class="header">Speed and Bonuses</div>
+  </div>
+  <div class="content">
+    <h4 class= "ui sub header"> Speed: ${race.speed}</h4>
+  </div>
+  <div class="content">
+    Strength: ${raceAbilityBonusArray[0]}<br>
+    Dexteriy: ${raceAbilityBonusArray[1]}<br>
+    Constitution: ${raceAbilityBonusArray[2]}<br>
+    Intelligence: ${raceAbilityBonusArray[3]}<br>
+    Wisdom: ${raceAbilityBonusArray[4]}<br>
+    Charisma: ${raceAbilityBonusArray[5]}<br>
+  </div>
+  `
+
+  const raceTraitsHeader = document.createElement("h3")
+  raceTraitsHeader.className = "ui header"
+  raceTraitsHeader.innerText = "Traits"
+
+  raceShowPage.appendChild(raceStats)
+  raceShowPage.appendChild(raceTraitsHeader)
+
+  const raceTraitItem = document.createElement("div")
+  raceTraitItem.className = "ui raised segment"
+
+  race.traits.forEach((trait) => appendRaceTraits(trait))
+
+  function appendRaceTraits(trait){
+
+    const raceTraitItemHeader = document.createElement("h5")
+    raceTraitItemHeader.innerText = `${trait.name}`
+    raceTraitItem.appendChild(raceTraitItemHeader)
+
+    const raceTraitItemDesc = document.createElement("p")
+    raceTraitItemDesc.innerText = `${trait.desc}`
+    raceTraitItem.appendChild(raceTraitItemDesc)
+  }
+
+  raceShowPage.appendChild(raceTraitItem)
+
+  body.appendChild(raceShowPage)
 }
 
 //// End of utility functions ////
