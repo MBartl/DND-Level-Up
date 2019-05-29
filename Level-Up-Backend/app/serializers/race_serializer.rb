@@ -3,4 +3,6 @@ class RaceSerializer < ActiveModel::Serializer
 
   # has_many :race_traits
   # has_many :traits, through: :race_traits
+
+  has_many :traits
 end
