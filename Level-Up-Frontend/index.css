@@ -1,0 +1,29 @@
+body {
+  z-index: 10;
+}
+tr {
+  vertical-align: top;
+}
+span.compendium {
+  padding-left: 0.8em;
+}
+.ui.button {
+  padding: 1em;
+}
+.ui.visible.thin.sidebar {
+  margin-top:6rem!important;
+  width:12rem;
+}
+#header {
+  height: 6em;
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  z-index: 20;
+}
+#body {
+  margin-top: 6em;
+  margin-left: 14rem;
+}

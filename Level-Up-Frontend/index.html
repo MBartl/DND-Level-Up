@@ -3,30 +3,7 @@
     <meta charset="UTF-8">
     <title>Level Up</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css" />
-  <style media="screen">
-    body {
-      z-index: 10;
-    }
-    .ui.button {
-      padding: 1em;
-    }
-    .ui.visible.thin.sidebar {
-      margin-top:6rem!important;
-      width:12rem;
-    }
-    #header {
-      height: 6em;
-      position: fixed;
-      top: 0px;
-      right: 0px;
-      bottom: 0px;
-      left: 0px;
-      z-index: 20;
-    }
-    #body {
-      margin-top: 6em;
-    }
-  </style>
+  <link rel="stylesheet" href="./index.css">
   </head>
 
   <body>
@@ -44,12 +21,12 @@
     </a>
     <a class="item" id="compendium">Compendium<i class="dropdown icon"></i></a>
     <div class="menu active" id="menu" hidden=true>
-      <a class="item"><span style="padding-left: 0.8em;">Classes</span></a>
-      <a class="item"><span style="padding-left: 0.8em;">Races</span></a>
-      <a class="item"><span style="padding-left: 0.8em;">Spells</span></a>
+      <a class="item"><span class="compendium">Classes</span></a>
+      <a class="item"><span class="compendium">Races</span></a>
+      <a class="item"><span class="compendium">Spells</span></a>
     </div>
   </div>
-  <div id="body" style="margin-left: 14rem;">
+  <div id="body">
   </div>
   </body>
   <script src="index.js"></script>

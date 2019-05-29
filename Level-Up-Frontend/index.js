@@ -1,7 +1,8 @@
 const URL = 'http://localhost:3000/api/v1';
 const body = document.querySelector('#body');
 
-let tableCell;
+let campaignCell = 0;
+let characterCell = 0;
 let currentCampaign;
 
 // Add event listeners to header and sidebar
@@ -14,15 +15,73 @@ existingCampaignsButton.addEventListener('click', listCampaigns);
 const compendiumBtn = document.getElementById('compendium');
 compendiumBtn.addEventListener('click', toggleCompendium);
 
+//// Utility functions ////
+
+// Adds row to table when number passes a multiple of 3
+function addRowToTable(table, cellCounter) {
+  newRow = document.createElement('tr')
+  for (let i = 1; i <= 3; i++) {
+    newRow.innerHTML += `
+    <td id=cell${cellCounter+i} hidden=true style="padding: 1.5em 0.8em;"></td>`;
+  }
+
+  table.firstChild.appendChild(newRow)
+}
+
+// Function to reset body
+function clearBody() {
+  const body = document.getElementById('body')
+  while (body.firstChild) {
+    body.removeChild(body.firstChild)
+  }
+}
+
+// Auto scales textarea by input
+function scaleTextArea() {
+  let tx = document.getElementsByTagName('textarea');
+  let width = tx[0].style.width
+  let i = 0;
+
+  for (i; i < tx.length; i++) {
+    i = Math.ceil(i/3)
+  }
+
+  debugger
+  for (i; i < tx.length; i++) {
+    if (tx[i].style.width > width) {
+      tx[i].style.width = width
+    }
+  }
+
+  for (i; i < tx.length; i++) {
+    if (tx[i].style.width > width) {
+      tx[i].style.width = width
+    }
+    tx[i].style = `height: ${tx[i].scrollHeight}px; overflow-y: hidden; width: ${width};`
+    tx[i].addEventListener('input', OnInput, false);
+  }
+
+  function OnInput() {
+    this.style = 'height: auto; width: auto';
+    this.style = `height: ${tx[i].scrollHeight}px; overflow-y: hidden; width: ${width};`
+  }
+}
+
 // Toggles compendium options
 function toggleCompendium() {
   menu = document.getElementById('menu');
   menu.hidden == true ? menu.hidden = false : menu.hidden = true;
 };
 
+//// End of utility functions ////
+
+
+//// Campaign functions ////
+
 // List of all campaigns
 function listCampaigns() {
-  tableCell = 0;
+  characterCell = 0
+  campaignCell = 0;
   clearBody();
 
   campaignTable = document.createElement('table');
@@ -37,17 +96,19 @@ function listCampaigns() {
   fetch(URL + '/campaigns')
   .then(resp => resp.json())
   .then(allCampaigns => {
-    allCampaigns.forEach(listEachCampaign)});
+    allCampaigns.forEach(listEachCampaign)
+    scaleTextArea
+  });
 };
 
 // Lists each campaign
 function listEachCampaign(campaign) {
   campaignTable = document.getElementById('campaign-table')
-  if (tableCell % 3 == 0) {
-    addRowToTable(campaignTable)
+  if (campaignCell % 3 == 0) {
+    addRowToTable(campaignTable, campaignCell)
   }
-  tableCell += 1
-  currentCell = document.getElementById(`cell${tableCell}`)
+  campaignCell += 1
+  currentCell = document.getElementById(`cell${campaignCell}`)
   currentCell.hidden = false
 
   div = document.createElement('div');
@@ -61,6 +122,7 @@ function listEachCampaign(campaign) {
   div.querySelector('.ui.red.button').addEventListener('click', () => console.log(event.target));
 
   currentCell.appendChild(div);
+  scaleTextArea()
 };
 
 // HTML for campaign card
@@ -75,7 +137,7 @@ function createCampaignDivHtml(div, campaign) {
         <div class="content">
           <div class="summary">
           <form>
-          <textarea style="height: 160px; width: 320px;">
+          <textarea style="width: 320px;">
             ${campaign.plot_notes}
           </textarea>
           </form>
@@ -90,17 +152,6 @@ function createCampaignDivHtml(div, campaign) {
       <button class="ui red button">Discard</button>
     </div>
   </div>`;
-}
-
-// Adds row when campaigns pass a multiple of 3
-function addRowToTable(campaignTable) {
-  newRow = document.createElement('tr')
-  newRow.innerHTML = `
-  <td id=cell${tableCell+1} hidden=true style="padding: 1.5em 0.8em;"></td>
-  <td id=cell${tableCell+2} hidden=true style="padding: 1.5em 0.8em;"></td>
-  <td id=cell${tableCell+3} hidden=true style="padding: 1.5em 0.8em;"></td>`;
-
-  campaignTable.firstChild.appendChild(newRow)
 }
 
 // Create a new campaign
@@ -132,16 +183,17 @@ function createCampaignForm() {
   campaignForm.id = 'campaign-form'
 
   campaignForm.innerHTML = `
-    <br><br>
-    <div class='field'>
-      <label>Campaign Name</label><br>
-      <input type='text' name='campaign-name' style='width: 300px;'><br><br>
+  <br><br>
+  <div class='field'>
+    <label>Campaign Name</label><br>
+    <input type='text' name='campaign-name' style='width: 300px;'><br><br>
 
-      <label>Campaign Summary</label><br>
-      <textarea name='campaign-description' form='create-campaign-form' style='height: 250px; width: 300px;'></textarea>
-      <br><br>
-      <input type='submit' value='Submit'>
-    </div>`;
+    <label>Campaign Summary</label><br>
+    <textarea name='campaign-description' form='create-campaign-form' style='width: 300px;'></textarea>
+    <br><br>
+    <input type='submit' value='Submit'>
+  </div>`;
+  scaleTextArea();
 }
 
 // Send the new campaign to the database
@@ -164,107 +216,96 @@ function createCampaignInstance(name, plot_notes) {
     })
 }
 
+
+//// Start of Individual Campaign related functions ////
+
 // Home page for a single campaign
 function campaignHomePage(campaign) {
-  debugger
+  clearBody()
+  body.innerHTML = `
+  <br>
+  <h1>${campaign.name}</h1>
+  <div class="content">
+    <div class="summary">
+      <form><textarea style="width: 50%; height: 15%;">
+        ${campaign.plot_notes}
+      </textarea></form>
+    </div>
+  </div>`;
+
+  campaign.characters.forEach(displayCharacter)
 }
 
+// Display each character on campaign page
+function displayCharacter(character) {
+  document.createElement('table')
 
-function clearBody() {
-  const body = document.getElementById('body')
-  while (body.firstChild) {
-    body.removeChild(body.firstChild)
-  }
+//   <div class="ui card">
+//   <div class="content">
+//     <div class="header">Cute Dog</div>
+//     <div class="meta">
+//       <span class="right floated time">2 days ago</span>
+//       <span class="category">Animals</span>
+//     </div>
+//     <div class="description">
+//       <p></p>
+//     </div>
+//   </div>
+//   <div class="extra content">
+//     <div class="right floated author">
+//       <img class="ui avatar image" src="/images/avatar/small/matt.jpg"> Matt
+//     </div>
+//   </div>
+// </div>
 }
 
-//////////////// End of Campaign related functions //////////////
-
-
-/////////////// Start of Individual Campaign related functions //
-function editCampaign(campaign) {
-  clearCampaigns();
-
-  const campaignCharactersList = document.createElement('ul')
-  campaignCharactersList.id = 'campaign-characters-list'
-  campaignCharactersList.className = 'ul list'
-  document.body.appendChild(campaignCharactersList)
-
-  fetch(URL + '/characters')
-    .then(resp => resp.json())
-    .then(allCharacters => allCharacters.forEach(listCharacter))
+// Edit a single campaign
+// function editCampaign(campaign) {
+//   clearCampaigns();
 
   //when hooking this up the backend, it will be necessary to write a
   //filter that uses the campaign object that's been passed in to find
   //the characters associated with that campaign
 
-  const newCampaignCharacter = document.createElement('button')
-  newCampaignCharacter.className = 'ui button'
-  newCampaignCharacter.innerText = 'Create New Character'
-  campaignCharactersList.appendChild(newCampaignCharacter)
+//   const newCampaignCharacter = document.createElement('button')
+//   newCampaignCharacter.className = 'ui button'
+//   newCampaignCharacter.innerText = 'Create New Character'
+//   campaignCharactersList.appendChild(newCampaignCharacter)
+//
+//   newCampaignCharacter.addEventListener('click', newCharacter)
+// }
 
-  newCampaignCharacter.addEventListener('click', newCharacter)
-}
-
-function listCharacter(character) {
-  const campaignCharactersList = document.getElementById('campaign-characters-list')
-
-  const campaignCharacter = document.createElement('div')
-  campaignCharacter.className = 'item'
-  campaignCharacter.innerHTML = `<img class='ui avatar image' src=''>
-    <div class='content'>
-      <a class='header'>${character.name}</a>
-      <div class='description'>${character.race} ${character.char_class}</div>
-    </div>`
-
-  const viewCampaignCharacter = document.createElement('button')
-  viewCampaignCharacter.className = 'ui button'
-  viewCampaignCharacter.innerText = 'View Character Sheet'
-
-  campaignCharactersList.appendChild(campaignCharacter)
-  campaignCharacter.appendChild(viewCampaignCharacter)
-
-  viewCampaignCharacter.addEventListener('click', function() {
-    viewCharacter(character)
-  })
-}
-
-function clearCharacters() {
-  const campaignCharactersList = document.getElementById('campaign-characters-list')
-
-  while (campaignCharactersList.firstChild) {
-    campaignCharactersList.removeChild(campaignCharactersList.firstChild)
-  }
-  campaignCharactersList.remove()
-}
-
-////////////End of Mass Character Related Functions////////////
-
-///////////Display Character Sheet Related Functions///////////
-
-function viewCharacter(character) {
-  clearCharacters()
-
-  const characterSheet = document.createElement('div')
-  document.body.appendChild(characterSheet)
-
-  // const characterAbility
-}
-
-function getCharacterAbilityScores(character) {
-
-  fetch('http://localhost:3000/routeTBD')
-    .then(resp => resp.json())
-    .then(scores => listScores(scores))
-
-  function listScores(scores) {
-    const abilityScoresUl = document.createElement('ul')
-
-  }
-}
-
-///////
-
-function newCharacter() {
-  clearCharacters()
-
-}
+// List characters specific to campaign
+// function listCharacter(character) {
+//   const campaignCharactersList = document.getElementById('campaign-characters-list')
+//
+//   const campaignCharacter = document.createElement('div')
+//   campaignCharacter.className = 'item'
+//   campaignCharacter.innerHTML = `
+//   <img class='ui avatar image' src=''>
+//   <div class='content'>
+//     <a class='header'>${character.name}</a>
+//     <div class='description'>${character.race} ${character.char_class}</div>
+//   </div>`
+//
+//   const viewCampaignCharacter = document.createElement('button')
+//   viewCampaignCharacter.className = 'ui button'
+//   viewCampaignCharacter.innerText = 'View Character Sheet'
+//
+//   campaignCharactersList.appendChild(campaignCharacter)
+//   campaignCharacter.appendChild(viewCampaignCharacter)
+//
+//   viewCampaignCharacter.addEventListener('click', function() {
+//     viewCharacter(character)
+//   })
+// }
+//
+// function clearCharacters() {
+//   const campaignCharactersList = document.getElementById('campaign-characters-list')
+//
+//   while (campaignCharactersList.firstChild) {
+//     campaignCharactersList.removeChild(campaignCharactersList.firstChild)
+//   }
+//   campaignCharactersList.remove()
+// }
+//// End of Mass Character Related Functions ////
