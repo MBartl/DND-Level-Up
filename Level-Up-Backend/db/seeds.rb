@@ -6,6 +6,7 @@
 # Please allow up to 5 minutes for the seed file to run
 
 # Delete and reset all seeded classes
+ClassSpell.destroy_all
 Proficiency.destroy_all
 AbilityScore.destroy_all
 Race.destroy_all
@@ -15,7 +16,7 @@ CharClass.destroy_all
 Subclass.destroy_all
 ClassProficiency.destroy_all
 Spell.destroy_all
-ClassSpell.destroy_all
+
 
 Proficiency.reset_pk_sequence
 AbilityScore.reset_pk_sequence
@@ -44,7 +45,7 @@ j = 0
 12.times do
   j += 1
   data = JSON.parse(RestClient.get(url + "/subclasses/#{j}"))
-  Subclass.create(name: data['name'], char_class: CharClass.all.find {|x| x.name == data['class']['name']}, flavor: data['subclass_flavor'], desc: data['desc'][0])
+  Subclass.create!(name: data['name'], char_class: CharClass.all.find {|x| x.name == data['class']['name']}, flavor: data['subclass_flavor'], desc: data['desc'][0])
 end
 
 # Seed Races
@@ -52,7 +53,7 @@ k = 0
 9.times do
   k += 1
   data = JSON.parse(RestClient.get(url + "/races/#{k}"))
-  Race.create(name: data['name'], speed: data['speed'], ability_bonuses: data['ability_bonuses'], alignment: data['alignment'], age: data['age'], size: data['size'])
+  Race.create!(name: data['name'], speed: data['speed'], ability_bonuses: data['ability_bonuses'], alignment: data['alignment'], age: data['age'], size: data['size'])
 end
 
 # Seed Proficiencies and Class-Proficiency join table

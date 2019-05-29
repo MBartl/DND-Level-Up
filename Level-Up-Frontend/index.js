@@ -71,6 +71,8 @@ function scaleTextArea() {
 function toggleCompendium() {
   menu = document.getElementById('menu');
   menu.hidden == true ? menu.hidden = false : menu.hidden = true;
+
+
 };
 
 //// End of utility functions ////
