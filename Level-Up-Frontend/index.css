@@ -16,7 +16,8 @@ span.compendium {
 div.ui.card.character {
   height: 200px;
 }
-span.race.compendium {
+span.race.compendium, span.class.compendium {
+  font-size: 0.9rem;
   padding-left: 1.6em;
 }
 div.page{
@@ -27,11 +28,13 @@ div.page{
   padding: 1em;
 }
 .ui.visible.thin.sidebar {
-  margin-top:6rem!important;
-  width:12rem;
+  font-size: 0.95rem;
+  margin-top: 5rem!important;
+  width: 12rem;
+  overflow-y: scroll;
 }
 #header {
-  height: 6em;
+  height: 5rem;
   position: fixed;
   top: 0px;
   right: 0px;
@@ -40,6 +43,6 @@ div.page{
   z-index: 20;
 }
 #body {
-  margin-top: 6em;
+  margin-top: 7.5em;
   margin-left: 14rem;
 }

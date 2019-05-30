@@ -20,11 +20,23 @@
       Characters
     </a>
     <a class="item" id="compendium">Compendium<i class="dropdown icon"></i></a>
-    <div class="menu active" id="menu" hidden=true>
-      <a class="item"><span class="compendium">Classes<i class="dropdown icon"></span></a>
-      <div class="menu active>" id="class-submenu" hidden=true>
-        <a class="item"><span class="class compendium"></span></a>
-      <a class="item"><span class="compendium">Races<i class="dropdown icon"></i></span></a>
+    <div class="menu active" id="extra-menu" hidden=true>
+      <a class="item" id="classes"><span class="compendium">Classes<i class="dropdown icon"></i></span></a>
+      <div class="menu active" id="class-submenu" hidden=true>
+        <a class="item"><span class="class compendium">Barbarian</span></a>
+        <a class="item"><span class="class compendium">Bard</span></a>
+        <a class="item"><span class="class compendium">Cleric</span></a>
+        <a class="item"><span class="class compendium">Druid</span></a>
+        <a class="item"><span class="class compendium">Fighter</span></a>
+        <a class="item"><span class="class compendium">Monk</span></a>
+        <a class="item"><span class="class compendium">Paladin</span></a>
+        <a class="item"><span class="class compendium">Ranger</span></a>
+        <a class="item"><span class="class compendium">Rogue</span></a>
+        <a class="item"><span class="class compendium">Sorcerer</span></a>
+        <a class="item"><span class="class compendium">Warlock</span></a>
+        <a class="item"><span class="class compendium">Wizard</span></a>
+      </div>
+      <a class="item" id="races"><span class="compendium">Races<i class="dropdown icon"></i></span></a>
       <div class="menu active" id="race-submenu" hidden=true>
         <a class="item"><span class="race compendium">Dwarf</span></a>
         <a class="item"><span class="race compendium">Elf</span></a>
@@ -42,6 +54,7 @@
   <div id="body">
   </div>
   </body>
-  <script src="character.js"></script>
-  <script src="index.js"></script>
+  <script src="js/campaign.js"></script>
+  <script src="js/character.js"></script>
+  <script src="js/index.js"></script>
 </html>
