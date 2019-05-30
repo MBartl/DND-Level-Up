@@ -94,19 +94,29 @@ function toggleCompendium() {
 
   const compendiumClassMenu = menu.querySelector('#classes');
   const compendiumRaceMenu = menu.querySelector('#races');
+  const compendiumSpellMenu = menu.querySelector('#spells');
 
   const classSubMenu = document.getElementById('class-submenu');
   const raceSubMenu = document.getElementById('race-submenu');
+  const spellSubMenu = document.getElementById('spell-submenu');
 
   compendiumClassMenu.addEventListener('click', () => {
     raceSubMenu.hidden = true;
+    spellSubMenu.hidden = true;
     toggleClassCompendium(classSubMenu);
   });
 
   compendiumRaceMenu.addEventListener('click', () => {
+    spellSubMenu.hidden = true;
     classSubMenu.hidden = true;
     toggleRaceCompendium(raceSubMenu);
   });
+
+  compendiumSpellMenu.addEventListener('click', () =>{
+    raceSubMenu.hidden = true;
+    classSubMenu.hidden = true;
+    toggleSpellCompendium(spellSubMenu)
+  })
 };
 
 // Toggles a submenu for classes under the compendium and stashes a dataset in them to use for a fetch
@@ -295,4 +305,13 @@ function displayRace(race){
   }
 
   body.appendChild(raceShowPage)
+}
+
+function toggleSpellCompendium(submenu){
+  submenu.hidden == true ? submenu.hidden = false : submenu.hidden = true;
+
+  spellSubMenuOptions = submenu.querySelectorAll(".item")
+  spellSubMenuOptionsNames = Array.from(spellSubMenuOptions).map(option => option.innerText)
+
+  spellSubMenuOptions.forEac
 }
