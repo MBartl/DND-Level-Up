@@ -1,3 +1,6 @@
+let campaignCell = 0;
+let currentCampaign;
+
 // List of all campaigns
 function listCampaigns() {
   characterCell = 0
@@ -164,12 +167,7 @@ function campaignHomePage(campaign) {
   </table>
   <h3>Characters:</h3>`;
 
-  characterTable = document.createElement('table');
-  characterTable.id = 'character-table';
-  characterTable.className = 'ui very basic collapsing celled table';
-  characterTable.innerHTML = `<tbody></tbody>`;
-
-  body.appendChild(characterTable);
+  createCharacterTable()
 
   fetchCharacters(campaign);
 }

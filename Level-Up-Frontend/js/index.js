@@ -1,10 +1,6 @@
 const URL = 'http://localhost:3000/api/v1';
 const body = document.querySelector('#body');
 
-let campaignCell = 0;
-let characterCell = 0;
-let campaignId;
-
 // Add event listeners to header and sidebar
 const newCampaignButton = document.getElementById('new-campaign-button');
 newCampaignButton.addEventListener('click', createCampaign);
@@ -16,7 +12,7 @@ const compendiumBtn = document.getElementById('compendium');
 compendiumBtn.addEventListener('click', toggleCompendium);
 
 const currentBtn = document.getElementById('current-campaign');
-currentBtn.addEventListener('click', currentCampaign);
+currentBtn.addEventListener('click', currentCampaignBtn);
 
 const charactersBtn = document.getElementById('characters');
 charactersBtn.addEventListener('click', checkCampaignCharacters)
@@ -76,7 +72,7 @@ function scaleTextArea() {
 };
 
 // Current Campaign button
-function currentCampaign() {
+function currentCampaignBtn() {
   if (currentCampaign) {
     campaignHomePage(currentCampaign);
   };
@@ -85,27 +81,46 @@ function currentCampaign() {
 // Current Campaign Characters button
 function checkCampaignCharacters() {
   if (currentCampaign) {
+    clearBody();
+    createCharacterTable();
     currentCampaign.characters.forEach(displayCharacter);
   };
 };
 
-
 // Toggles compendium options
 function toggleCompendium() {
-  menu = document.getElementById('menu');
+  menu = document.getElementById('extra-menu');
   menu.hidden == true ? menu.hidden = false : menu.hidden = true;
 
-  const compendiumMenus = menu.querySelectorAll(".item")
-  const compendiumRaceMenu = compendiumMenus[1]
-  compendiumRaceMenu.addEventListener("click", toggleRaceCompendium)
+  const compendiumClassMenu = menu.querySelector('#classes');
+  const compendiumRaceMenu = menu.querySelector('#races');
+
+  const classSubMenu = document.getElementById('class-submenu');
+  const raceSubMenu = document.getElementById('race-submenu');
+
+  compendiumClassMenu.addEventListener('click', () => {
+    raceSubMenu.hidden = true;
+    toggleClassCompendium(classSubMenu);
+  });
+
+  compendiumRaceMenu.addEventListener('click', () => {
+    classSubMenu.hidden = true;
+    toggleRaceCompendium(raceSubMenu);
+  });
 };
 
-//toggles a submenu for races under the compendium and stashes a dataset in them to use for a fetch
-function toggleRaceCompendium(){
-  raceSubMenu = document.getElementById("race-submenu");
-  raceSubMenu.hidden == true ? raceSubMenu.hidden = false : raceSubMenu.hidden = true;
+// Toggles a submenu for classes under the compendium and stashes a dataset in them to use for a fetch
+function toggleClassCompendium(submenu){
+  submenu.hidden == true ? submenu.hidden = false : submenu.hidden = true;
 
-  const raceSubMenuOptions = raceSubMenu.querySelectorAll(".item")
+  //////////////////////
+}
+
+// Toggles a submenu for races under the compendium and stashes a dataset in them to use for a fetch
+function toggleRaceCompendium(submenu){
+  submenu.hidden == true ? submenu.hidden = false : submenu.hidden = true;
+
+  const raceSubMenuOptions = submenu.querySelectorAll(".item")
   let counter = 1
   while(counter <= 9){
     raceSubMenuOptions.forEach(function(raceItem){
@@ -118,7 +133,7 @@ function toggleRaceCompendium(){
   }
 }
 
-//Clears the page and fetches race data from server
+// Clears the page and fetches race data from server
 function displayRaceCompendium(raceId){
 
   clearBody();
@@ -145,7 +160,7 @@ function displayRace(race){
   body.appendChild(raceShowPage)
 }
 
-//Clears the page and fetches race data from server
+// Clears the page and fetches race data from server
 function displayRaceCompendium(raceId){
 
   clearBody();
@@ -156,7 +171,7 @@ function displayRaceCompendium(raceId){
 
 }
 
-//Accepts a race object as an argument and displays its data on the page
+// Accepts a race object as an argument and displays its data on the page
 function displayRace(race){
 
   const raceShowPage = document.createElement("div")
@@ -193,31 +208,32 @@ function displayRace(race){
     Charisma: ${raceAbilityBonusArray[5]}<br>
   </div>
   `
-
-  const raceTraitsHeader = document.createElement("h3")
-  raceTraitsHeader.className = "ui header"
-  raceTraitsHeader.innerText = "Traits"
-
   raceShowPage.appendChild(raceStats)
-  raceShowPage.appendChild(raceTraitsHeader)
 
-  const raceTraitItem = document.createElement("div")
-  raceTraitItem.className = "ui raised segment"
+  if (!(race.name == "Human")) {
+    const raceTraitsHeader = document.createElement("h3")
+    raceTraitsHeader.className = "ui header"
+    raceTraitsHeader.innerText = "Traits"
 
-  race.traits.forEach((trait) => appendRaceTraits(trait))
+    raceShowPage.appendChild(raceTraitsHeader)
 
-  function appendRaceTraits(trait){
+    const raceTraitItem = document.createElement("div")
+    raceTraitItem.className = "ui raised segment"
 
-    const raceTraitItemHeader = document.createElement("h5")
-    raceTraitItemHeader.innerText = `${trait.name}`
-    raceTraitItem.appendChild(raceTraitItemHeader)
+    race.traits.forEach((trait) => appendRaceTraits(trait))
 
-    const raceTraitItemDesc = document.createElement("p")
-    raceTraitItemDesc.innerText = `${trait.desc}`
-    raceTraitItem.appendChild(raceTraitItemDesc)
+    function appendRaceTraits(trait){
+
+      const raceTraitItemHeader = document.createElement("h5")
+      raceTraitItemHeader.innerText = `${trait.name}`
+      raceTraitItem.appendChild(raceTraitItemHeader)
+
+      const raceTraitItemDesc = document.createElement("p")
+      raceTraitItemDesc.innerText = `${trait.desc}`
+      raceTraitItem.appendChild(raceTraitItemDesc)
+    }
+    raceShowPage.appendChild(raceTraitItem)
   }
-
-  raceShowPage.appendChild(raceTraitItem)
 
   body.appendChild(raceShowPage)
 }

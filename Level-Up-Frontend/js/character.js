@@ -1,3 +1,5 @@
+let characterCell = 0;
+
 // Get request for characters of one campaign
 function fetchCharacters(campaign) {
   fetch(URL + `/campaigns/${campaign.id}`)
@@ -7,6 +9,14 @@ function fetchCharacters(campaign) {
   });
 };
 
+function createCharacterTable() {
+  characterTable = document.createElement('table');
+  characterTable.id = 'character-table';
+  characterTable.className = 'ui very basic collapsing celled table';
+  characterTable.innerHTML = `<tbody></tbody>`;
+  body.appendChild(characterTable)
+}
+
 // Display each character on campaign page
 function displayCharacter(character) {
   characterTable = document.getElementById('character-table');
@@ -14,6 +24,7 @@ function displayCharacter(character) {
     addRowToTable(characterTable, characterCell);
   };
   characterCell += 1;
+  debugger
 
   currentCell = document.getElementById(`cell${characterCell}`);
   currentCell.hidden = false;
