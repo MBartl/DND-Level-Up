@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_28_183843) do
+ActiveRecord::Schema.define(version: 2019_05_30_025235) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,16 @@ ActiveRecord::Schema.define(version: 2019_05_28_183843) do
     t.index ["proficiency_id"], name: "index_character_proficiencies_on_proficiency_id"
   end
 
+  create_table "character_proficiency_choices", force: :cascade do |t|
+    t.bigint "character_id"
+    t.bigint "proficiency_id"
+    t.string "proficiency_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_id"], name: "index_character_proficiency_choices_on_character_id"
+    t.index ["proficiency_id"], name: "index_character_proficiency_choices_on_proficiency_id"
+  end
+
   create_table "character_spells", force: :cascade do |t|
     t.bigint "spell_id"
     t.bigint "character_id"
@@ -86,6 +96,17 @@ ActiveRecord::Schema.define(version: 2019_05_28_183843) do
     t.datetime "updated_at", null: false
     t.index ["char_class_id"], name: "index_class_proficiencies_on_char_class_id"
     t.index ["proficiency_id"], name: "index_class_proficiencies_on_proficiency_id"
+  end
+
+  create_table "class_proficiency_choices", force: :cascade do |t|
+    t.bigint "char_class_id"
+    t.bigint "proficiency_id"
+    t.string "proficiency_type"
+    t.integer "choices"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["char_class_id"], name: "index_class_proficiency_choices_on_char_class_id"
+    t.index ["proficiency_id"], name: "index_class_proficiency_choices_on_proficiency_id"
   end
 
   create_table "class_spells", force: :cascade do |t|
@@ -126,6 +147,31 @@ ActiveRecord::Schema.define(version: 2019_05_28_183843) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "skills", force: :cascade do |t|
+    t.bigint "character_id"
+    t.integer "athletics"
+    t.integer "acrobatics"
+    t.integer "sleight_of_hand"
+    t.integer "stealth"
+    t.integer "arcana"
+    t.integer "history"
+    t.integer "investigation"
+    t.integer "nature"
+    t.integer "religion"
+    t.integer "animal_handling"
+    t.integer "insight"
+    t.integer "medicine"
+    t.integer "perception"
+    t.integer "survival"
+    t.integer "deception"
+    t.integer "intimidation"
+    t.integer "performance"
+    t.integer "persuasion"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_id"], name: "index_skills_on_character_id"
+  end
+
   create_table "spells", force: :cascade do |t|
     t.string "name"
     t.text "desc"
@@ -159,6 +205,8 @@ ActiveRecord::Schema.define(version: 2019_05_28_183843) do
 
   add_foreign_key "character_proficiencies", "characters"
   add_foreign_key "character_proficiencies", "proficiencies"
+  add_foreign_key "character_proficiency_choices", "characters"
+  add_foreign_key "character_proficiency_choices", "proficiencies"
   add_foreign_key "character_spells", "characters"
   add_foreign_key "character_spells", "spells"
   add_foreign_key "characters", "ability_scores"
@@ -168,10 +216,13 @@ ActiveRecord::Schema.define(version: 2019_05_28_183843) do
   add_foreign_key "characters", "subclasses"
   add_foreign_key "class_proficiencies", "char_classes"
   add_foreign_key "class_proficiencies", "proficiencies"
+  add_foreign_key "class_proficiency_choices", "char_classes"
+  add_foreign_key "class_proficiency_choices", "proficiencies"
   add_foreign_key "class_spells", "char_classes"
   add_foreign_key "class_spells", "spells"
   add_foreign_key "class_spells", "subclasses"
   add_foreign_key "race_traits", "races"
   add_foreign_key "race_traits", "traits"
+  add_foreign_key "skills", "characters"
   add_foreign_key "subclasses", "char_classes"
 end

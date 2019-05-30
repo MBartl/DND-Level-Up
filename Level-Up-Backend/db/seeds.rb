@@ -1,11 +1,11 @@
 # This seed file makes a bunch of calls to this D&D API:
 # http://www.dnd5eapi.co/
 #
-# Current call count: 501
+# Current call count: 513
 #
-# Please allow up to 5 minutes for the seed file to run
+# Please allow up to 10 minutes for the seed file to run
 
-# # Delete and reset all seeded classes
+# Delete and reset all seeded classes
 # ClassSpell.destroy_all
 # Proficiency.destroy_all
 # AbilityScore.destroy_all
@@ -16,8 +16,9 @@
 # Subclass.destroy_all
 # ClassProficiency.destroy_all
 # Spell.destroy_all
-#
-#
+ClassProficiencyChoice.destroy_all
+
+
 # Proficiency.reset_pk_sequence
 # AbilityScore.reset_pk_sequence
 # Race.reset_pk_sequence
@@ -28,10 +29,12 @@
 # ClassProficiency.reset_pk_sequence
 # Spell.reset_pk_sequence
 # ClassSpell.reset_pk_sequence
-#
-# # Define base URL
-# url = "http://www.dnd5eapi.co/api"
-#
+ClassProficiencyChoice.reset_pk_sequence
+
+
+# Define base URL
+url = "http://www.dnd5eapi.co/api"
+
 # # Seed Classes
 # i = 0
 # 12.times do
@@ -56,7 +59,7 @@
 #   Race.create!(name: data['name'], speed: data['speed'], ability_bonuses: data['ability_bonuses'], alignment: data['alignment'], age: data['age'], size: data['size'])
 # end
 #
-# # Seed Proficiencies and Class-Proficiency join table
+# # Seed Proficiencies, Class-Proficiency, and Class-Choice join table
 # l = 0
 # 122.times do
 #   l += 1
@@ -98,6 +101,17 @@
 #   end
 # end
 
+# Seed class proficiency choices
+p = 0
+12.times do
+  p += 1
+  data = JSON.parse(RestClient.get(url + "/classes/#{p}"))
+  data['proficiency_choices'].each do |class_prof_choice|
+    class_prof_choice['from'].each do |proficiency|
+      ClassProficiencyChoice.create(char_class: CharClass.all.find{|x| x.name == data['name']}, proficiency: Proficiency.all.find{|x| x.name == proficiency['name']}, proficiency_type: Proficiency.all.find{|x| x.name == proficiency['name']}.category, choices: class_prof_choice['choose'])
+    end
+  end
+end
 
 
 # # Seed Equipment
@@ -108,24 +122,55 @@
 #   Equipment.create(data)
 # end
 
+
+
 AbilityScore.destroy_all
 Character.destroy_all
+CharacterProficiencyChoice.destroy_all
+Skill.destroy_all
 
 AbilityScore.reset_pk_sequence
 Character.reset_pk_sequence
+CharacterProficiencyChoice.reset_pk_sequence
+Skill.reset_pk_sequence
 
-p = 0
+# create characters
+q = 0
 30.times do
-  p += 1
+  q += 1
   def loop
+    # create character
     ability_score = AbilityScore.create(strength: rand(9)+8, dexterity: rand(9)+8, constitution: rand(9)+9, intelligence: rand(9)+8, wisdom: rand(9)+8, charisma: rand(9)+8)
     char_class = CharClass.all.sample
-    new = Character.new(name: Faker::Games::WorldOfWarcraft.hero, level: rand(12)+3, bio: Faker::Books::Dune.quote, ability_score: ability_score, race: Race.all.sample, char_class: char_class, subclass: Subclass.all.find {|x| x.char_class == char_class}, campaign: Campaign.all.length > 0 ? Campaign.all.sample : nil)
+    new = Character.new(name: Faker::Games::WorldOfWarcraft.hero, level: rand(12)+3, bio: Faker::Books::Dune.quote, ability_score: ability_score, race: Race.all.sample, char_class: char_class, subclass: Subclass.all.find {|x| x.char_class == char_class}, campaign: rand(8)+1 == 1 ? nil : Campaign.all.length > 0 ? Campaign.all.sample : nil)
     if Character.all.map(&:name).include?(new.name) || Character.all.map(&:bio).include?(new.bio)
       return loop
     else
       new.save
     end
+
   end
   loop
 end
+
+# create character proficiencies
+Character.all.each do |character|
+  # choose character proficiencies
+  proficiency_choice_types = character.char_class.class_proficiency_choices.map(&:proficiency_type).uniq
+  array_of_proficiency_choices = proficiency_choice_types.map{|x| character.char_class.class_proficiency_choices.select{|y| y.proficiency_type == x}}
+  array_of_proficiency_choices.each do |category|
+    number_of_choices = category[0].choices
+    until number_of_choices == 0
+      joinModelOption = category.sample
+      newProf = joinModelOption.proficiency
+      CharacterProficiencyChoice.create(proficiency: newProf, character: character, proficiency_type: newProf.category)
+      category.delete(joinModelOption)
+      number_of_choices -= 1
+    end
+  end
+end
+
+# # create skills
+# Character.all.each do |character|
+#   byebug
+# end
