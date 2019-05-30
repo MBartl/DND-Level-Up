@@ -21,7 +21,8 @@ span.race.compendium, span.class.compendium {
   padding-left: 1.6em;
 }
 div.page{
-
+  margin-right: 30px;
+  margin-bottom: 40px;
   padding-top: 85px;
 }
 .ui.button {

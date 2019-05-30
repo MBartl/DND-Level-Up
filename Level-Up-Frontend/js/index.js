@@ -135,9 +135,10 @@ function displayClassCompendium(classId){
   .then(charClass => displayClass(charClass))
 }
 
+//Accepts a class object for its argument and displays its info in the body
 function displayClass(charClass){
 
-  console.log(charClass)
+  clearBody();
 
   const classShowPage = document.createElement("div")
   classShowPage.className = "page"
@@ -147,6 +148,7 @@ function displayClass(charClass){
   classHeader.innerText = `${charClass.name}`
   classShowPage.appendChild(classHeader)
 
+  //builds the subclass and lore segment
   const classSubclassDiv = document.createElement("div")
   classSubclassDiv.className = "ui piled segment"
   classShowPage.appendChild(classSubclassDiv)
@@ -161,10 +163,37 @@ function displayClass(charClass){
   classSubclassFlavor.innerText = `${charClass.subclasses[0].flavor}`
   classSubclassDiv.appendChild(classSubclassFlavor)
 
-
   const classSubclassFluff = document.createElement("p")
   classSubclassFluff.innerText = `${charClass.subclasses[0].desc}`
   classSubclassDiv.appendChild(classSubclassFluff)
+
+  //builds the proficiency segment
+  const classProfDiv = document.createElement("div")
+
+  const classProfHeader = document.createElement("h2")
+  classProfHeader.innerText = "Proficiencies"
+  classProfHeader.className = "ui header center aligned"
+  classProfDiv.appendChild(classProfHeader)
+
+  const classProfUl = document.createElement("ul")
+  classProfUl.className = "ul list"
+  classProfDiv.appendChild(classProfUl)
+
+  const classProfItems = charClass.proficiencies
+
+  function listClassProficiency(proficiencyItem){
+    const classProfLi = document.createElement("li")
+    classProfLi.innerText = `${proficiencyItem.name}`
+    console.log(proficiencyItem.name)
+    classProfUl.appendChild(classProfLi)
+  }
+
+  classProfItems.forEach(listClassProficiency)
+  classShowPage.appendChild(classProfDiv)
+
+  //writes the spellbook segment
+
+
 
   body.appendChild(classShowPage)
 }
@@ -197,19 +226,12 @@ function displayRaceCompendium(raceId){
 
 }
 
-// Clears the page and fetches race data from server
-function displayRaceCompendium(raceId){
 
-  clearBody();
-
-  fetch(URL + `/races/${raceId}`)
-  .then(resp => resp.json())
-  .then(race => displayRace(race))
-
-}
 
 // Accepts a race object as an argument and displays its data on the page
 function displayRace(race){
+
+  clearBody()
 
   const raceShowPage = document.createElement("div")
   raceShowPage.className = "page"
