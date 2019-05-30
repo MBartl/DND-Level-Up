@@ -10,5 +10,5 @@ class CharClass < ApplicationRecord
   has_many :characters, dependent: :destroy
 
   has_many :class_proficiency_choices, dependent: :destroy
-  has_many :proficiencies, through: :character_proficiency_choices
+  has_many :proficiencies, through: :class_proficiency_choices
 end

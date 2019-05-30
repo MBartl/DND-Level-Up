@@ -33,85 +33,74 @@
 #
 #
 # Define base URL
-# url = "http://www.dnd5eapi.co/api"
-#
-# # Seed Classes
-# i = 0
-# 12.times do
-#   i += 1
-#   data = JSON.parse(RestClient.get(url + "/classes/#{i}"))
-#   CharClass.create(name: data['name'], hit_die: data['hit_die'], saving_throws: data['saving_throws'].map {|x| x['name']}.join(', '))
-# end
-#
-# # Seed Subclasses
-# j = 0
-# 12.times do
-#   j += 1
-#   data = JSON.parse(RestClient.get(url + "/subclasses/#{j}"))
-#   Subclass.create!(name: data['name'], char_class: CharClass.all.find {|x| x.name == data['class']['name']}, flavor: data['subclass_flavor'], desc: data['desc'][0])
-# end
-#
-# # Seed Races
-# k = 0
-# 9.times do
-#   k += 1
-#   data = JSON.parse(RestClient.get(url + "/races/#{k}"))
-#   Race.create!(name: data['name'], speed: data['speed'], ability_bonuses: data['ability_bonuses'], alignment: data['alignment'], age: data['age'], size: data['size'])
-# end
-#
-# # Seed Proficiencies and Class-Proficiency join table
-# l = 0
-# 122.times do
-#   l += 1
-#   data = JSON.parse(RestClient.get(url + "/proficiencies/#{l}"))
-#   proficiency = Proficiency.create(category: data['type'], name: data['name'])
-#   data['classes'].each do |char_class|
-#     ClassProficiency.create(char_class: CharClass.all.find {|x| x.name == char_class['name']}, proficiency: proficiency)
-#   end
-# end
-#
-# # Seed Traits and Race-Trait join table
-# m = 0
-# 27.times do
-#   m += 1
-#   data = JSON.parse(RestClient.get(url + "/traits/#{m}"))
-#   trait = Trait.create(name: data['name'], desc: data['desc'][0])
-#
-#   data['races'].each do |race|
-#     name = race['name'].split(' ').last
-#     race = Race.all.find {|x| x.name == name}
-#     RaceTrait.all.find {|x| x.race == race && x.trait == trait} ? nil :
-#       RaceTrait.create(race: race, trait: trait)
-#   end
-# end
-#
-# # Seed Spells and Class/Subclass-Spell join table
-# n = 0
-# 319.times do
-#   n += 1
-#   data = JSON.parse(RestClient.get(url + "/spells/#{n}"))
-#   spell = Spell.create(name: data['name'], desc: data['desc'][0], range: data['range'], components: data['components'].join(', '), duration: data['duration'], concentration: data['concentration'] == 'yes' ? true : false, casting_time: data['casting_time'], level: data['level'], school: data['school']['name'])
-#
-#   data['classes'].each do |char_class|
-#     ClassSpell.create(char_class: CharClass.find {|x| x.name == char_class['name']}, spell: spell)
-#   end
-#
-#   data['subclasses'].each do |subclass|
-#     ClassSpell.create(subclass: Subclass.find {|x| x.name == subclass['name']}, spell: spell)
-#   end
-# end
-#
-# # Seed class proficiency choices
-# p = 0
-# 12.times do
-#   p += 1
-#   data = JSON.parse(RestClient.get(url + "/classes/#{p}"))
-#   data['proficiency_choices'].each do |class_prof_choice|
-#     class_prof_choice['from'].each do |proficiency|
-#       ClassProficiencyChoice.create(char_class: CharClass.all.find{|x| x.name == data['name']}, proficiency: Proficiency.all.find{|x| x.name == proficiency['name']}, proficiency_type: Proficiency.all.find{|x| x.name == proficiency['name']}.category, choices: class_prof_choice['choose'])
-#     end
-#   end
-# end
+url = "http://www.dnd5eapi.co/api"
+
+# Seed Classes
+i = 0
+12.times do
+  i += 1
+  data = JSON.parse(RestClient.get(url + "/classes/#{i}"))
+  CharClass.create(name: data['name'], hit_die: data['hit_die'], saving_throws: data['saving_throws'].map {|x| x['name']}.join(', '))
+end
+
+# Seed Subclasses
+j = 0
+12.times do
+  j += 1
+  data = JSON.parse(RestClient.get(url + "/subclasses/#{j}"))
+  Subclass.create!(name: data['name'], char_class: CharClass.all.find {|x| x.name == data['class']['name']}, flavor: data['subclass_flavor'], desc: data['desc'][0])
+end
+
+# Seed Races
+k = 0
+9.times do
+  k += 1
+  data = JSON.parse(RestClient.get(url + "/races/#{k}"))
+  Race.create!(name: data['name'], speed: data['speed'], ability_bonuses: data['ability_bonuses'], alignment: data['alignment'], age: data['age'], size: data['size'])
+end
+
+# Seed Proficiencies, Class-Proficiency, and Class-Choice join table
+l = 0
+122.times do
+  l += 1
+  data = JSON.parse(RestClient.get(url + "/proficiencies/#{l}"))
+  proficiency = Proficiency.create(category: data['type'], name: data['name'])
+  data['classes'].each do |char_class|
+    ClassProficiency.create(char_class: CharClass.all.find {|x| x.name == char_class['name']}, proficiency: proficiency)
+  end
+end
+
+# Seed Traits and Race-Trait join table
+m = 0
+27.times do
+  m += 1
+  data = JSON.parse(RestClient.get(url + "/traits/#{m}"))
+  trait = Trait.create(name: data['name'], desc: data['desc'][0])
+
+  data['races'].each do |race|
+    name = race['name'].split(' ').last
+    race = Race.all.find {|x| x.name == name}
+    RaceTrait.all.find {|x| x.race == race && x.trait == trait} ? nil :
+      RaceTrait.create(race: race, trait: trait)
+  end
+end
+
+# Seed Spells and Class/Subclass-Spell join table
+n = 0
+319.times do
+  n += 1
+  data = JSON.parse(RestClient.get(url + "/spells/#{n}"))
+  spell = Spell.create(name: data['name'], desc: data['desc'][0], range: data['range'], components: data['components'].join(', '), duration: data['duration'], concentration: data['concentration'] == 'yes' ? true : false, casting_time: data['casting_time'], level: data['level'], school: data['school']['name'])
+
+  data['classes'].each do |char_class|
+    ClassSpell.create(char_class: CharClass.find {|x| x.name == char_class['name']}, spell: spell)
+  end
+
+  data['subclasses'].each do |subclass|
+    ClassSpell.create(subclass: Subclass.find {|x| x.name == subclass['name']}, spell: spell)
+  end
+end
+
 
 Campaign.destroy_all
 Campaign.reset_pk_sequence

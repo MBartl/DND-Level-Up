@@ -6,7 +6,7 @@ Rails.application.routes.draw do
       resources :races, only: [:index, :show]
       resources :ability_scores, only: [:show, :create]
       resources :characters, only: [:index, :show, :create]
-      resources :char_classes, only: [:index]
+      resources :char_classes, only: [:index, :show]
       # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
     end
   end

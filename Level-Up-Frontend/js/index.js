@@ -113,7 +113,89 @@ function toggleCompendium() {
 function toggleClassCompendium(submenu){
   submenu.hidden == true ? submenu.hidden = false : submenu.hidden = true;
 
-  //////////////////////
+  const classSubMenuOptions = submenu.querySelectorAll(".item")
+  let counter = 1
+  while(counter <= 9){
+    classSubMenuOptions.forEach(function(classItem){
+      classItem.dataset.classId = counter
+      classItem.addEventListener("click", function(){
+        displayClassCompendium(classItem.dataset.classId)
+      })
+      counter += 1
+    })
+  }
+}
+
+//Clears the page and fetches class data from server
+function displayClassCompendium(classId){
+  clearBody()
+
+  fetch(URL + `/char_classes/${classId}`)
+  .then(resp => resp.json())
+  .then(charClass => displayClass(charClass))
+}
+
+//Accepts a class object for its argument and displays its info in the body
+function displayClass(charClass){
+
+  clearBody();
+
+  const classShowPage = document.createElement("div")
+  classShowPage.className = "page"
+
+  const classHeader = document.createElement("h1")
+  classHeader.className = "ui header center aligned"
+  classHeader.innerText = `${charClass.name}`
+  classShowPage.appendChild(classHeader)
+
+  //builds the subclass and lore segment
+  const classSubclassDiv = document.createElement("div")
+  classSubclassDiv.className = "ui piled segment"
+  classShowPage.appendChild(classSubclassDiv)
+
+  const classSubclassHeader = document.createElement("h2")
+  classSubclassHeader.innerText = `${charClass.subclasses[0].name}`
+  classSubclassHeader.className = "ui header center aligned"
+  classSubclassDiv.appendChild(classSubclassHeader)
+
+  const classSubclassFlavor = document.createElement("h3")
+  classSubclassFlavor.className = "ui header center aligned"
+  classSubclassFlavor.innerText = `${charClass.subclasses[0].flavor}`
+  classSubclassDiv.appendChild(classSubclassFlavor)
+
+  const classSubclassFluff = document.createElement("p")
+  classSubclassFluff.innerText = `${charClass.subclasses[0].desc}`
+  classSubclassDiv.appendChild(classSubclassFluff)
+
+  //builds the proficiency segment
+  const classProfDiv = document.createElement("div")
+
+  const classProfHeader = document.createElement("h2")
+  classProfHeader.innerText = "Proficiencies"
+  classProfHeader.className = "ui header center aligned"
+  classProfDiv.appendChild(classProfHeader)
+
+  const classProfUl = document.createElement("ul")
+  classProfUl.className = "ul list"
+  classProfDiv.appendChild(classProfUl)
+
+  const classProfItems = charClass.proficiencies
+
+  function listClassProficiency(proficiencyItem){
+    const classProfLi = document.createElement("li")
+    classProfLi.innerText = `${proficiencyItem.name}`
+    console.log(proficiencyItem.name)
+    classProfUl.appendChild(classProfLi)
+  }
+
+  classProfItems.forEach(listClassProficiency)
+  classShowPage.appendChild(classProfDiv)
+
+  //writes the spellbook segment
+
+
+
+  body.appendChild(classShowPage)
 }
 
 // Toggles a submenu for races under the compendium and stashes a dataset in them to use for a fetch
@@ -144,35 +226,12 @@ function displayRaceCompendium(raceId){
 
 }
 
-function displayRace(race){
-  const raceShowPage = document.createElement("div")
-  // const raceShowPage.className =
 
-  raceShowPage.innerHTML = `<h1>Race Name</h1>
-  <div>Race Alignment
-  Race Age
-  Race Size
-  <div>
-  <div>Race Speed and Bonuses</div>
-  <div>Race Traits</div>
-  `
-
-  body.appendChild(raceShowPage)
-}
-
-// Clears the page and fetches race data from server
-function displayRaceCompendium(raceId){
-
-  clearBody();
-
-  fetch(URL + `/races/${raceId}`)
-  .then(resp => resp.json())
-  .then(race => displayRace(race))
-
-}
 
 // Accepts a race object as an argument and displays its data on the page
 function displayRace(race){
+
+  clearBody()
 
   const raceShowPage = document.createElement("div")
   raceShowPage.className = "page"
