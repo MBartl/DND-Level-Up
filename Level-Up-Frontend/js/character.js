@@ -24,13 +24,12 @@ function displayCharacter(character) {
     addRowToTable(characterTable, characterCell);
   };
   characterCell += 1;
-  debugger
 
   currentCell = document.getElementById(`cell${characterCell}`);
   currentCell.hidden = false;
 
   let div = document.createElement('div');
-  createCharacterDivHtml(div, character);
+  addCharacterDivHtml(div, character);
 
   let editBtn = div.querySelector('.ui.secondary.button');
   editBtn.addEventListener('click', () => {console.log(character)});
@@ -39,7 +38,7 @@ function displayCharacter(character) {
 };
 
 // HTML for character card
-function createCharacterDivHtml(div, character) {
+function addCharacterDivHtml(div, character) {
   div.className = 'ui card character';
   div.innerHTML = `
   <div class="content">

@@ -167,6 +167,8 @@ function campaignHomePage(campaign) {
   </table>
   <h3>Characters:</h3>`;
 
+  addCharacterBtn = body.querySelector('.ui.primary.button')
+
   createCharacterTable()
 
   fetchCharacters(campaign);

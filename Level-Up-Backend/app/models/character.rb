@@ -1,5 +1,7 @@
 class Character < ApplicationRecord
   belongs_to :ability_score, optional: true
+  belongs_to :skill, optional: true
+
   belongs_to :race
   belongs_to :char_class
   belongs_to :subclass
@@ -7,6 +9,9 @@ class Character < ApplicationRecord
 
   has_many :character_spells
   has_many :spells, through: :character_spells
+
+  has_many :character_proficiency_choices, dependent: :destroy
+  has_many :proficiencies, through: :character_proficiency_choices
 
   has_many :character_proficiencies, dependent: :destroy
   has_many :proficiencies, through: :character_proficiencies
