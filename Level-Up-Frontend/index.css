@@ -16,7 +16,7 @@ span.compendium {
 div.ui.card.character {
   height: 200px;
 }
-span.race.compendium, span.class.compendium {
+span.race.compendium, span.class.compendium, span.spell.compendium {
   font-size: 0.9rem;
   padding-left: 1.6em;
 }
