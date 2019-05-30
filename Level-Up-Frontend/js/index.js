@@ -113,7 +113,60 @@ function toggleCompendium() {
 function toggleClassCompendium(submenu){
   submenu.hidden == true ? submenu.hidden = false : submenu.hidden = true;
 
-  //////////////////////
+  const classSubMenuOptions = submenu.querySelectorAll(".item")
+  let counter = 1
+  while(counter <= 9){
+    classSubMenuOptions.forEach(function(classItem){
+      classItem.dataset.classId = counter
+      classItem.addEventListener("click", function(){
+        displayClassCompendium(classItem.dataset.classId)
+      })
+      counter += 1
+    })
+  }
+}
+
+//Clears the page and fetches class data from server
+function displayClassCompendium(classId){
+  clearBody()
+
+  fetch(URL + `/char_classes/${classId}`)
+  .then(resp => resp.json())
+  .then(charClass => displayClass(charClass))
+}
+
+function displayClass(charClass){
+
+  console.log(charClass)
+
+  const classShowPage = document.createElement("div")
+  classShowPage.className = "page"
+
+  const classHeader = document.createElement("h1")
+  classHeader.className = "ui header center aligned"
+  classHeader.innerText = `${charClass.name}`
+  classShowPage.appendChild(classHeader)
+
+  const classSubclassDiv = document.createElement("div")
+  classSubclassDiv.className = "ui piled segment"
+  classShowPage.appendChild(classSubclassDiv)
+
+  const classSubclassHeader = document.createElement("h2")
+  classSubclassHeader.innerText = `${charClass.subclasses[0].name}`
+  classSubclassHeader.className = "ui header center aligned"
+  classSubclassDiv.appendChild(classSubclassHeader)
+
+  const classSubclassFlavor = document.createElement("h3")
+  classSubclassFlavor.className = "ui header center aligned"
+  classSubclassFlavor.innerText = `${charClass.subclasses[0].flavor}`
+  classSubclassDiv.appendChild(classSubclassFlavor)
+
+
+  const classSubclassFluff = document.createElement("p")
+  classSubclassFluff.innerText = `${charClass.subclasses[0].desc}`
+  classSubclassDiv.appendChild(classSubclassFluff)
+
+  body.appendChild(classShowPage)
 }
 
 // Toggles a submenu for races under the compendium and stashes a dataset in them to use for a fetch
@@ -142,22 +195,6 @@ function displayRaceCompendium(raceId){
   .then(resp => resp.json())
   .then(race => displayRace(race))
 
-}
-
-function displayRace(race){
-  const raceShowPage = document.createElement("div")
-  // const raceShowPage.className =
-
-  raceShowPage.innerHTML = `<h1>Race Name</h1>
-  <div>Race Alignment
-  Race Age
-  Race Size
-  <div>
-  <div>Race Speed and Bonuses</div>
-  <div>Race Traits</div>
-  `
-
-  body.appendChild(raceShowPage)
 }
 
 // Clears the page and fetches race data from server
