@@ -60,3 +60,7 @@ function addCharacterDivHtml(div, character) {
     </div>
   </div>`;
 };
+
+function createCharacter() {
+  
+}

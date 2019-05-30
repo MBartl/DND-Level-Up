@@ -1,6 +1,7 @@
 class Character < ApplicationRecord
   belongs_to :ability_score, optional: true
-  belongs_to :skill, optional: true
+
+  has_many :skills, dependent: :destroy
 
   belongs_to :race
   belongs_to :char_class
