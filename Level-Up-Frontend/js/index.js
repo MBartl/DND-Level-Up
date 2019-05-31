@@ -32,7 +32,7 @@ function addRowToTable(table, cellCounter, num) {
 
 // Function to reset body
 function clearBody() {
-  const body = document.getElementById('body');
+  body.style = 'margin-top: 7.5em; margin-left: 14rem';
   while (body.firstChild) {
     body.removeChild(body.firstChild);
   };
@@ -77,6 +77,7 @@ function currentCampaignBtn() {
     campaignHomePage(currentCampaign);
   }
   else {
+    clearBody();
     h3 = document.createElement('h3')
     h3.innerText = "Make a new campaign or choose from our existing campaigns first."
     body.appendChild(h3)

@@ -185,26 +185,56 @@ function characterFormPage(character) {
   classScroll = characterForm.querySelector('#class-scroll')
   addClassOptions(classScroll, classOptions)
 
+  const raceOptions = ["Dwarf", "Elf", "Halfling", "Human", "Dragonborn", "Gnome", "Half-Elf", "Half-Orc", "Tiefling"]
+  raceScroll = characterForm.querySelector('#race-scroll')
+  addClassOptions(raceScroll, raceOptions)
+
+  statsBox = characterForm.querySelector('#stats-box')
+  addStatsBox(statsBox)
+
+  reroll = characterForm.querySelector('#reroll')
+  reroll.addEventListener('click', (e) => {
+    e.preventDefault();
+    while (statsBox.firstChild) {
+      statsBox.removeChild(statsBox.firstChild);
+    };
+    addStatsBox(statsBox);
+  })
+
+  characterForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert("We're still working on this part!")
+  })
+
   body.appendChild(characterForm)
 }
 
+
 function createCharacterFormHTML(character, form) {
+  body.style = `background-image: url("dndbackground.jpg"); z-index: 9; background-repeat: no-repeat; height: 108%;`;
+  form.style = "padding-right: 5%;";
   form.innerHTML = `
-  <div class="ui segment" style="height: 25%;">
+  <div class="ui segment" style="width: 35em; height: 35em;">
     <div class="ui two column very relaxed grid">
-      <div class="column textpanel" style="padding-top: 2em;">
+      <div class="column textpanel" style="padding-top: 2em; padding-right: 10%;">
         <image src="charactersheet.png">
         <input id="charNameField"></input>
       </div>
-      <div class="column" style="text-align: center;">
+      <div class="column" style="text-align: center; padding-left: 5.5em;">
         <h3>Class:</h3>
         <div id=class-scroll></div>
-        <br>
         <h3>Race:</h3>
         <div id=race-scroll></div>
       </div>
     </div>
-  </div>`;
+    <div class="ui segment" style="width: 33em; height: 20em;">
+    <br><br><br>
+    <div class="ui three column very relaxed grid" id="stats-box">
+    </div>
+    <br><br>
+    <button style='font-size: 1.35em;' id="reroll">Reroll Stats 🎲</button>
+  </div>
+  <input type="submit" style="align-content: center;">`;
 }
 
 function addClassOptions(scroll, options) {
@@ -234,4 +264,43 @@ function addClassOptions(scroll, options) {
     scroll.querySelector('#option').innerText = options[picker]
   }
 
+}
+
+function addStatsBox(statsBox) {
+  let strength, dexterity, constitution, intelligence, wisdom, charisma;
+
+  function rollStats() {
+    strength = Math.floor(Math.random() * 8) + 8;
+    dexterity = Math.floor(Math.random() * 8) + 8;
+    constitution = Math.floor(Math.random() * 8) + 8;
+    intelligence = Math.floor(Math.random() * 8) + 8;
+    wisdom = Math.floor(Math.random() * 8) + 8;
+    charisma = Math.floor(Math.random() * 8) + 8;
+  }
+
+  rollStats();
+
+  statsBox.innerHTML = `
+  <div class="column textpanel" style="font-size: 17;">
+  <div>
+  Strength:<div class='stat'>${strength}</div>
+  <br>
+  Dexterity:<div class='stat'>${dexterity}</div>
+  </div>
+  </div>
+  <div class="column textpanel" style="font-size: 17;">
+  <div>
+  Constitution:<div class='stat'>${constitution}</div>
+  <br>
+  Intelligence:<div class='stat'>${intelligence}</div>
+  </div>
+  </div>
+  <div class="column textpanel" style="font-size: 17;">
+  <div>
+  Wisdom:<div class='stat'>${wisdom}</div>
+  <br>
+  Charisma:<div class='stat'>${charisma}</div>
+  </div>
+  </div>
+  `;
 }
