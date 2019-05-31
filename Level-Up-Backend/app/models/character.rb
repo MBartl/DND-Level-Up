@@ -1,11 +1,13 @@
 class Character < ApplicationRecord
   belongs_to :ability_score, optional: true
-  belongs_to :skill, optional: true
+  has_many :character_campaigns, dependent: :destroy
+  has_many :campaigns, through: :character_campaigns
 
   belongs_to :race
   belongs_to :char_class
   belongs_to :subclass
-  belongs_to :campaign, optional: true
+
+  has_many :skills, dependent: :destroy
 
   has_many :character_spells
   has_many :spells, through: :character_spells
@@ -20,6 +22,6 @@ class Character < ApplicationRecord
   has_many :spells, through: :character_spells
 
   def self.filter_campaign_characters(campaign)
-    Character.all.select{|character| character.campaign == campaign }
+    Character.all.select{|character| character.character_campaign.campaign == campaign }
   end
 end
