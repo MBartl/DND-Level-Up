@@ -6,29 +6,29 @@
 # Please allow up to 10 minutes for the seed file to run
 
 # Delete and reset all seeded classes
-# ClassSpell.destroy_all
-# Proficiency.destroy_all
-# AbilityScore.destroy_all
-# Race.destroy_all
-# Trait.destroy_all
-# RaceTrait.destroy_all
-# CharClass.destroy_all
-# Subclass.destroy_all
-# ClassProficiency.destroy_all
-# Spell.destroy_all
+ClassSpell.destroy_all
+Proficiency.destroy_all
+AbilityScore.destroy_all
+Race.destroy_all
+Trait.destroy_all
+RaceTrait.destroy_all
+CharClass.destroy_all
+Subclass.destroy_all
+ClassProficiency.destroy_all
+Spell.destroy_all
 ClassProficiencyChoice.destroy_all
 
 
-# Proficiency.reset_pk_sequence
-# AbilityScore.reset_pk_sequence
-# Race.reset_pk_sequence
-# Trait.reset_pk_sequence
-# RaceTrait.reset_pk_sequence
-# CharClass.reset_pk_sequence
-# Subclass.reset_pk_sequence
-# ClassProficiency.reset_pk_sequence
-# Spell.reset_pk_sequence
-# ClassSpell.reset_pk_sequence
+Proficiency.reset_pk_sequence
+AbilityScore.reset_pk_sequence
+Race.reset_pk_sequence
+Trait.reset_pk_sequence
+RaceTrait.reset_pk_sequence
+CharClass.reset_pk_sequence
+Subclass.reset_pk_sequence
+ClassProficiency.reset_pk_sequence
+Spell.reset_pk_sequence
+ClassSpell.reset_pk_sequence
 ClassProficiencyChoice.reset_pk_sequence
 
 
@@ -101,28 +101,31 @@ n = 0
   end
 end
 
-# Seed class proficiency choices
-p = 0
-12.times do
-  p += 1
-  data = JSON.parse(RestClient.get(url + "/classes/#{p}"))
-  data['proficiency_choices'].each do |class_prof_choice|
-    class_prof_choice['from'].each do |proficiency|
-      ClassProficiencyChoice.create(char_class: CharClass.all.find{|x| x.name == data['name']}, proficiency: Proficiency.all.find{|x| x.name == proficiency['name']}, proficiency_type: Proficiency.all.find{|x| x.name == proficiency['name']}.category, choices: class_prof_choice['choose'])
-    end
-  end
-end
 
+# Create campaigns
+Campaign.destroy_all
+Campaign.reset_pk_sequence
 
-# # Seed Equipment
-# o = 0
-# 256.times do
-#   o += 1
-#   data = JSON.parse(RestClient.get(url + "/equipment/#{o}"))
-#   Equipment.create(data)
-# end
+Campaign.create(name: "Princes of the Apocolypse", plot_notes: "A terrible threat gathers in the North. Throughout this region of the Forgotten Realms, savage marauders bring destruction. Monsters are on the prowl, preying on flocks, rampaging through croplands, and attacking homesteads and travelers. In settlements, discord and suspicion grow. Sinister strangers lurk in the shadows, whispering about how everything is soon to change.")
 
+Campaign.create(name: "Death House", plot_notes: "Death House is the name given to an old row house in the village of Barovia (area E7 on the village map). The house has been burned to the ground many times, only to rise from the ashes time and again—by its own will or that of Strahd. Locals give the building a wide berth for fear of antagonizing the evil spirits believed to haunt it.")
 
+Campaign.create(name: "Tyranny in Phlan", plot_notes: "Things are changing in Phlan, and for the worse. The Cult of the Dragon has spies deeply rooted in the castle and has been corrupting many of the town’s defenders, gathering new allies and otherwise readying to make a move for control of the town and the Pool of Radiance that lies beneath it. Knight Commander Ector Brahms, the Lord Regent of Phlan, has called a secret summit of the masters of the town’s four major guilds and the head of each noble house. At the foot of the Cinnabar Throne, he plans to hammer out the terms of an alliance and bring order and peace to the town once and for all. It is here, however, that the hammer will fall in the form of Vorgansharax, the Maimed Virulence: a green dragon who has allied himself with the Cult of the Dragon in exchange for dominion over Phlan.")
+
+Campaign.create(name: "A Wild Sheep Chase", plot_notes: "The party’s attempt to grab a rare afternoon of downtime is interrupted by a frantic sheep equipped with a Scroll of Speak to Animals and a fierce determination to get their attention. With the aid of some magic, the creature reveals itself to be no mere beast, but a wizard who fell victim to an embittered apprentice and a stolen Wand of True Polymorph.
+After two years imprisoned with nothing to eat but his own lawn, the ex-elf has escaped and is in dire need of aid. Transformed assassins are looking to grab themselves a mutton dinner, while the only object capable of restoring his opposable thumbs lies in the hands of his former pupil and current nemesis. Fortunately, the wooly wizard has found new allies he can rely on, right?")
+
+Campaign.create(name: "The Wolves of Welton", plot_notes: "It’s been a long time since the people of Welton have worried about anything more frightening than sheep ticks or a late frost, but now a pack of strangely determined wolves is driving farmers from their fields and spiriting away entire flocks in the middle of the night.
+With food supplies running low and their sorcerer-in-residence nowhere to be found, the village council sends out a desperate plea for brave adventurers to destroy the beasts for good. Is the job as easy as a walk in the woods, or is there more to the Wolves of Welton than mere animal cunning? There's only one way to find out…")
+
+Campaign.create(name: "The Fiery Grog", plot_notes: "The Fiery Grog is a popular watering hole for the more rough and tumble folk of Port Myrandu. The seedy tavern is often the meeting place for shady dealings kept hidden by the loud drunken activities that permeate the building each night.
+Whether your adventurers are meeting an important NPC in private, they’re in need of a quest hook or two to move the adventure forward, or looking to blow off some steam by partying hard and maybe get into a brawl, the Fiery Grog is the place to go.")
+
+Campaign.create(name: "Madness of the Rat King", plot_notes: "An ambitious were-rat alchemist known only as 'the Rat King' set up a base of operations down in these caverns a year ago. He has been working tirelessly in his laboratory since then, using alchemy and magic to mutate and breed loyal rat minions to suit his needs: for example, combining rats with aberrant beholder essence to create loyal 'laser rats' with the ability to float and shoot fiery rays, as alchemists are wont to do. To sustain his operations, he sends his rat minions out into the world to collect supplies, from food/drink to other necessary equipment.
+The initial motives for the Rat King’s experimentation is a mystery even to himself. At some point during his time in these caverns, a dark influence took hold of him, slowly driving him insane. The Rat King now has one clear goal in his crazed mind: to create an army of mutant rats and take over the surface, to escape and protect the world from what he calls “the Old Voice,” a malicious entity that whispers to him endlessly from the deep.")
+
+Campaign.create(name: "Seven Weddings", plot_notes: "Lilian was a witch who studied the arcane in a hamlet called Lukestown. Her love of mysticisms was only eclipsed by her love for her fiancé Marcus. Lilian loved him so much, she began crafting a pair of magical rings that would grant her and Marcus immortality. However, the powerful magics involved were well beyond Lilian’s skills. One night while working on the rings, the life and death magics went awry, killing Lilian.
+Marcus was crushed. They laid Lilian to rest in the town’s mausoleum. It was not long before Lilian's spirit rose, fueled by her own foul magics. Marcus tried to visit, but over time, Lilian grew more and more hateful. Marcus stopped visiting when it became clear her undead nature had overpowered any humanity left within.")
 
 AbilityScore.destroy_all
 Character.destroy_all
@@ -134,43 +137,152 @@ Character.reset_pk_sequence
 CharacterProficiencyChoice.reset_pk_sequence
 Skill.reset_pk_sequence
 
-# create characters
-q = 0
-30.times do
-  q += 1
-  def loop
-    # create character
-    ability_score = AbilityScore.create(strength: rand(9)+8, dexterity: rand(9)+8, constitution: rand(9)+9, intelligence: rand(9)+8, wisdom: rand(9)+8, charisma: rand(9)+8)
-    char_class = CharClass.all.sample
-    new = Character.new(name: Faker::Games::WorldOfWarcraft.hero, level: rand(12)+3, bio: Faker::Books::Dune.quote, ability_score: ability_score, race: Race.all.sample, char_class: char_class, subclass: Subclass.all.find {|x| x.char_class == char_class}, campaign: rand(8)+1 == 1 ? nil : Campaign.all.length > 0 ? Campaign.all.sample : nil)
-    if Character.all.map(&:name).include?(new.name) || Character.all.map(&:bio).include?(new.bio)
-      return loop
-    else
-      new.save
-    end
 
-  end
-  loop
-end
-
-# create character proficiencies
-Character.all.each do |character|
-  # choose character proficiencies
-  proficiency_choice_types = character.char_class.class_proficiency_choices.map(&:proficiency_type).uniq
-  array_of_proficiency_choices = proficiency_choice_types.map{|x| character.char_class.class_proficiency_choices.select{|y| y.proficiency_type == x}}
+# Create character proficiencies
+def create_proficiencies(new)
+  proficiency_choice_types = new.char_class.class_proficiency_choices.map(&:proficiency_type).uniq
+  array_of_proficiency_choices = proficiency_choice_types.map{|x| new.char_class.class_proficiency_choices.select{|y| y.proficiency_type == x}}
+  # choose proficiencies
   array_of_proficiency_choices.each do |category|
     number_of_choices = category[0].choices
     until number_of_choices == 0
       joinModelOption = category.sample
       newProf = joinModelOption.proficiency
-      CharacterProficiencyChoice.create(proficiency: newProf, character: character, proficiency_type: newProf.category)
+      CharacterProficiencyChoice.create(proficiency: newProf, character: new, proficiency_type: newProf.category)
       category.delete(joinModelOption)
       number_of_choices -= 1
     end
   end
 end
 
-# # create skills
-# Character.all.each do |character|
-#   byebug
+
+# Create skills
+def create_skills(new)
+  # modifiers
+  strength, dexterity, intelligence, wisdom, charisma = (new.ability_score.strength)/2-5, (new.ability_score.dexterity)/2-5, (new.ability_score.intelligence)/2-5, (new.ability_score.wisdom)/2-5, (new.ability_score.charisma)/2-5
+
+  # create skill based on ability score modifier
+  athletics = strength
+  acrobatics, sleight_of_hand, stealth = dexterity, dexterity, dexterity
+  arcana, history_s, investigation, nature, religion = intelligence, intelligence, intelligence, intelligence, intelligence
+  animal_handling, insight, medicine, perception, survival = wisdom, wisdom, wisdom, wisdom, wisdom
+  deception, intimidation, performance, persuasion = charisma, charisma, charisma, charisma
+
+  # collect proficiency choices
+  skill_bonuses = new.character_proficiency_choices.select{|x| x.proficiency_type == "Skills"}.map(&:proficiency).map(&:name).map{|x| x.split(': ')[1].downcase}
+  skill_bonuses.each do |bonus|
+    athletics += (new.level/4.floor() + 2) if bonus == "athletics"
+    acrobatics += (new.level/4.floor() + 2) if bonus == "acrobatics"
+    sleight_of_hand += (new.level/4.floor() + 2) if bonus == "sleight_of_hand"
+    stealth += (new.level/4.floor() + 2) if bonus == "stealth"
+    arcana += (new.level/4.floor() + 2) if bonus == "arcana"
+    history_s += (new.level/4.floor() + 2) if bonus == "history_s"
+    investigation += (new.level/4.floor() + 2) if bonus == "investigation"
+    nature += (new.level/4.floor() + 2) if bonus == "nature"
+    religion += (new.level/4.floor() + 2) if bonus == "religion"
+    animal_handling += (new.level/4.floor() + 2) if bonus == "animal_handling"
+    insight += (new.level/4.floor() + 2) if bonus == "insight"
+    medicine += (new.level/4.floor() + 2) if bonus == "medicine"
+    perception += (new.level/4.floor() + 2) if bonus == "perception"
+    survival += (new.level/4.floor() + 2) if bonus == "survival"
+    deception += (new.level/4.floor() + 2) if bonus == "deception"
+    intimidation += (new.level/4.floor() + 2) if bonus == "intimidation"
+    performance += (new.level/4.floor() + 2) if bonus == "performance"
+    persuasion += (new.level/4.floor() + 2) if bonus == "persuasion"
+  end
+
+  Skill.create(character: new, athletics: athletics, acrobatics: acrobatics, sleight_of_hand: sleight_of_hand, stealth: stealth, arcana: arcana, history: history_s, investigation: investigation, nature: nature, religion: religion, animal_handling: animal_handling, insight: insight, medicine: medicine, perception: perception, survival: survival, deception: deception, intimidation: intimidation, performance: performance, persuasion: persuasion)
+end
+
+
+# Create characters (1 of 2)
+16.times do
+  # Create character
+  ability_score = AbilityScore.create(strength: rand(9)+8, dexterity: rand(9)+8, constitution: rand(9)+9, intelligence: rand(9)+8, wisdom: rand(9)+8, charisma: rand(9)+8)
+  char_class = CharClass.all.sample
+  new = Character.create(name: Faker::Games::WorldOfWarcraft.unique.hero, level: rand(12)+3, bio: Faker::Books::Dune.unique.quote, ability_score: ability_score, race: Race.all.sample, char_class: char_class, subclass: Subclass.all.find {|x| x.char_class == char_class})
+
+  # Add race bonuses
+  str_bonus = new.race.ability_bonuses[1].to_i
+  AbilityScore.update(strength: ability_score.strength += str_bonus) if str_bonus > 0
+
+  dex_bonus = new.race.ability_bonuses[4].to_i
+  AbilityScore.update(dexterity: ability_score.dexterity += dex_bonus) if dex_bonus > 0
+
+  const_bonus = new.race.ability_bonuses[7].to_i
+  AbilityScore.update(constitution: ability_score.constitution += const_bonus) if const_bonus > 0
+
+  int_bonus = new.race.ability_bonuses[10].to_i
+  AbilityScore.update(intelligence: ability_score.intelligence += int_bonus) if int_bonus > 0
+
+  wis_bonus = new.race.ability_bonuses[13].to_i
+  AbilityScore.update(wisdom: ability_score.wisdom += wis_bonus) if wis_bonus > 0
+
+  cha_bonus = new.race.ability_bonuses[16].to_i
+  AbilityScore.update(charisma: ability_score.charisma += cha_bonus) if cha_bonus > 0
+
+  create_proficiencies(new)
+  create_skills(new)
+end
+
+# Create characters (2 of 2)
+23.times do
+  ability_score = AbilityScore.create(strength: rand(9)+8, dexterity: rand(9)+8, constitution: rand(9)+9, intelligence: rand(9)+8, wisdom: rand(9)+8, charisma: rand(9)+8)
+  char_class = CharClass.all.sample
+  new = Character.create(name: Faker::Games::ElderScrolls.unique.name, level: rand(12)+3, bio: Faker::Books::Dune.unique.quote, ability_score: ability_score, race: Race.all.sample, char_class: char_class, subclass: Subclass.all.find {|x| x.char_class == char_class})
+
+  # Add race bonuses
+  str_bonus = new.race.ability_bonuses[1].to_i
+  AbilityScore.update(strength: ability_score.strength += str_bonus) if str_bonus > 0
+
+  dex_bonus = new.race.ability_bonuses[4].to_i
+  AbilityScore.update(dexterity: ability_score.dexterity += dex_bonus) if dex_bonus > 0
+
+  const_bonus = new.race.ability_bonuses[7].to_i
+  AbilityScore.update(constitution: ability_score.constitution += const_bonus) if const_bonus > 0
+
+  int_bonus = new.race.ability_bonuses[10].to_i
+  AbilityScore.update(intelligence: ability_score.intelligence += int_bonus) if int_bonus > 0
+
+  wis_bonus = new.race.ability_bonuses[13].to_i
+  AbilityScore.update(wisdom: ability_score.wisdom += wis_bonus) if wis_bonus > 0
+
+  cha_bonus = new.race.ability_bonuses[16].to_i
+  AbilityScore.update(charisma: ability_score.charisma += cha_bonus) if cha_bonus > 0
+
+  create_proficiencies(new)
+  create_skills(new)
+end
+
+# THE LEGEND #
+1.times do
+  char_class = CharClass.all[11]
+  ability_score = AbilityScore.create(strength: 22, dexterity: 27, constitution: 56, intelligence: 4, wisdom: 99, charisma: 900)
+  theLegendPB = Character.create(name: "Paul Blart the Magnificent", level: 21, bio: "Safety never takes a holiday.\n\nGino, your end is nigh;", ability_score: ability_score, race: Race.all[4], char_class: char_class, subclass: Subclass.all.find {|x| x.char_class == char_class})
+
+  create_proficiencies(theLegendPB)
+  create_skills(theLegendPB)
+end
+
+# Create character - campaign associations
+Character.all.each do |character|
+  dice_roll = rand(8)+1
+  campaign = dice_roll == 1 ? nil : Campaign.all.length > 0 ? Campaign.all.sample : nil
+  unless campaign == nil
+    CharacterCampaign.create(character: character, campaign: campaign)
+  end
+end
+
+
+
+
+
+# # TO DO: Add equipment, race proficiencies, languages, character spells
+# # Seed Equipment
+# o = 0
+# 256.times do
+#   o += 1
+#   data = JSON.parse(RestClient.get(url + "/equipment/#{o}"))
+#   Equipment.create(data)
 # end
+#

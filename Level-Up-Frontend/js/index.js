@@ -20,9 +20,9 @@ charactersBtn.addEventListener('click', checkCampaignCharacters)
 //// Utility functions ////
 
 // Adds row to table when number passes a multiple of 3
-function addRowToTable(table, cellCounter) {
+function addRowToTable(table, cellCounter, num) {
   newRow = document.createElement('tr');
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= num; i++) {
     newRow.innerHTML += `
     <td id=cell${cellCounter+i} hidden=true style="padding: 1.5em 0.8em;"></td>`;
   };
