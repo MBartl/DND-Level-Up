@@ -159,15 +159,11 @@ function displayClass(charClass){
   classSubclassDiv.className = "ui piled segment"
   classShowPage.appendChild(classSubclassDiv)
 
-  const classSubclassHeader = document.createElement("h2")
-  classSubclassHeader.innerText = `${charClass.subclasses[0].name}`
+  const classSubclassHeader = document.createElement("div")
+  classSubclassHeader.innerHTML = `
+    <h2>${charClass.subclasses[0].name}</h2><span style="font-size: 1.1em;">${charClass.subclasses[0].flavor}</span>`;
   classSubclassHeader.className = "ui header center aligned"
   classSubclassDiv.appendChild(classSubclassHeader)
-
-  const classSubclassFlavor = document.createElement("h3")
-  classSubclassFlavor.className = "ui header center aligned"
-  classSubclassFlavor.innerText = `${charClass.subclasses[0].flavor}`
-  classSubclassDiv.appendChild(classSubclassFlavor)
 
   const classSubclassFluff = document.createElement("p")
   classSubclassFluff.innerText = `${charClass.subclasses[0].desc}`
@@ -183,6 +179,7 @@ function displayClass(charClass){
 
   const classProfUl = document.createElement("ul")
   classProfUl.className = "ul list"
+  classProfUl.style = "padding-left: 42.5%;"
   classProfDiv.appendChild(classProfUl)
 
   const classProfItems = charClass.proficiencies
@@ -337,7 +334,7 @@ function displaySpells(spells, spellSchool){
   listSpell(filteredSpells);
 
 
-  function listSpell(spells){
+  function listSpell(filteredSpells){
 
     const pageScroll = document.createElement("div")
 
@@ -375,14 +372,15 @@ function displaySpells(spells, spellSchool){
     spellSchoolListing.appendChild(spellPage)
 
     /////experimental
-    let list = spells;
     let pageList = new Array();
     let currentPage = 1;
-    let numberPerPage = 8;
-    let numberOfPages = 1;
+    let numberOfPages;
+    const list = filteredSpells;
+    const numberPerPage = 8;
+    getNumberOfPages()
 
     function getNumberOfPages() {
-      return Math.ceil(list.length / numberPerPage);
+      numberOfPages = Math.ceil(list.length / numberPerPage);
     }
 
     function load(){
@@ -391,11 +389,17 @@ function displaySpells(spells, spellSchool){
 
     function nextPage() {
       currentPage += 1;
+      if (currentPage > numberOfPages) {
+        currentPage = numberOfPages
+      }
       loadList();
     }
 
-    function previousPage() {
+    function previousPage(numberOfPages) {
       currentPage -= 1;
+      if (currentPage < 1) {
+        currentPage = 1
+      }
       loadList();
     }
 
@@ -404,12 +408,30 @@ function displaySpells(spells, spellSchool){
       loadList();
     }
 
-    function lastPage() {
+    function lastPage(numberOfPages) {
       currentPage = numberOfPages;
       loadList();
     }
 
     function loadList() {
+      if (currentPage == 1) {
+        spellPrev.disabled = true;
+        spellFirst.disabled = true;
+      }
+      else {
+        spellPrev.disabled = false;
+        spellFirst.disabled = false;
+      };
+
+      if (currentPage == numberOfPages) {
+        spellNext.disabled = true;
+        spellLast.disabled = true;
+      }
+      else {
+        spellNext.disabled = false;
+        spellLast.disabled = false;
+      };
+
       let begin = ((currentPage - 1) * numberPerPage);
       let end = begin + numberPerPage;
 
