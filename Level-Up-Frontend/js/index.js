@@ -342,7 +342,7 @@ function displaySpells(spells, spellSchool){
   spellSchoolListing.id = "spell-page"
   spellSchoolDiv.appendChild(spellSchoolListing)
 
-  listSpell(spells);
+  listSpell(filteredSpells);
 
 
   function listSpell(spells){
@@ -352,21 +352,25 @@ function displaySpells(spells, spellSchool){
     const spellFirst = document.createElement("button");
     spellFirst.id = "spell-first"
     spellFirst.innerText = "First"
+    spellFirst.className = "ui button"
     pageScroll.appendChild(spellFirst)
 
     const spellPrev = document.createElement("button");
     spellPrev.id = "spell-previous"
     spellPrev.innerText = "Previous"
+    spellPrev.className = "ui button"
     pageScroll.appendChild(spellPrev)
 
     const spellNext = document.createElement("button");
     spellNext.id = "spell-next"
     spellNext.innerText = "Next"
+    spellNext.className = "ui button"
     pageScroll.appendChild(spellNext)
 
     const spellLast = document.createElement("button");
     spellLast.id = "spell-last"
     spellLast.innerText = "Last"
+    spellLast.className = "ui button"
     pageScroll.appendChild(spellLast)
 
     spellFirst.addEventListener("click", firstPage)
@@ -454,10 +458,10 @@ function displaySpells(spells, spellSchool){
     }
 
     function check() {
-      // spellNext.disabled = currentPage == numberOfPages ? true : false;
-      // spellPrev.disabled = currentPage == 1 ? true : false;
-      // spellFirst.disabled = currentPage == 1 ? true : false;
-      // spellLast.disabled = currentPage == numberOfPages ? true : false;
+      // spellNext.disabled = currentPage === numberOfPages ? true : false;
+      // spellPrev.disabled = currentPage === 1 ? true : false;
+      // spellFirst.disabled = currentPage === 1 ? true : false;
+      // spellLast.disabled = currentPage === numberOfPages ? true : false;
     }
 
     load();
