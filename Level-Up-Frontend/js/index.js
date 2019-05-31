@@ -94,19 +94,29 @@ function toggleCompendium() {
 
   const compendiumClassMenu = menu.querySelector('#classes');
   const compendiumRaceMenu = menu.querySelector('#races');
+  const compendiumSpellMenu = menu.querySelector('#spells');
 
   const classSubMenu = document.getElementById('class-submenu');
   const raceSubMenu = document.getElementById('race-submenu');
+  const spellSubMenu = document.getElementById('spell-submenu');
 
   compendiumClassMenu.addEventListener('click', () => {
     raceSubMenu.hidden = true;
+    spellSubMenu.hidden = true;
     toggleClassCompendium(classSubMenu);
   });
 
   compendiumRaceMenu.addEventListener('click', () => {
+    spellSubMenu.hidden = true;
     classSubMenu.hidden = true;
     toggleRaceCompendium(raceSubMenu);
   });
+
+  compendiumSpellMenu.addEventListener('click', () =>{
+    raceSubMenu.hidden = true;
+    classSubMenu.hidden = true;
+    toggleSpellCompendium(spellSubMenu)
+  })
 };
 
 // Toggles a submenu for classes under the compendium and stashes a dataset in them to use for a fetch
@@ -184,7 +194,6 @@ function displayClass(charClass){
   function listClassProficiency(proficiencyItem){
     const classProfLi = document.createElement("li")
     classProfLi.innerText = `${proficiencyItem.name}`
-    console.log(proficiencyItem.name)
     classProfUl.appendChild(classProfLi)
   }
 
@@ -295,4 +304,166 @@ function displayRace(race){
   }
 
   body.appendChild(raceShowPage)
+}
+
+function toggleSpellCompendium(submenu){
+  submenu.hidden == true ? submenu.hidden = false : submenu.hidden = true;
+
+  spellSubMenuOptions = submenu.querySelectorAll(".item")
+  spellSubMenuOptions.forEach(hookUpListener)
+  // spellSubMenuOptionsNames = Array.from(spellSubMenuOptions).map(option => option.innerText)
+
+  function hookUpListener(menuItem){
+    menuItem.addEventListener("click", function(){
+      displaySpellCompendium(menuItem.innerText)
+    })
+  }
+}
+
+function displaySpellCompendium(spellSchool){
+
+  fetch(URL + `/spells`)
+  .then(resp => resp.json())
+  .then(spells => displaySpells(spells, spellSchool))
+
+}
+
+function displaySpells(spells, spellSchool){
+  clearBody();
+  const filteredSpells = spells.filter(spell => spellSchool === spell.school)
+  const spellCount = filteredSpells.length;
+
+  const spellSchoolDiv = document.createElement("div")
+  spellSchoolDiv.className = "page"
+
+  spellSchoolDiv.innerHTML = `<h1 class=ui header center aligned> ${spellSchool}</h1>`
+
+  const spellSchoolListing = document.createElement("div")
+  spellSchoolListing.id = "spell-page"
+  spellSchoolDiv.appendChild(spellSchoolListing)
+
+  listSpell(spells);
+
+
+  function listSpell(spells){
+
+    const pageScroll = document.createElement("div")
+
+    const spellFirst = document.createElement("button");
+    spellFirst.id = "spell-first"
+    spellFirst.innerText = "First"
+    pageScroll.appendChild(spellFirst)
+
+    const spellPrev = document.createElement("button");
+    spellPrev.id = "spell-previous"
+    spellPrev.innerText = "Previous"
+    pageScroll.appendChild(spellPrev)
+
+    const spellNext = document.createElement("button");
+    spellNext.id = "spell-next"
+    spellNext.innerText = "Next"
+    pageScroll.appendChild(spellNext)
+
+    const spellLast = document.createElement("button");
+    spellLast.id = "spell-last"
+    spellLast.innerText = "Last"
+    pageScroll.appendChild(spellLast)
+
+    spellFirst.addEventListener("click", firstPage)
+    spellNext.addEventListener("click", nextPage)
+    spellPrev.addEventListener("click", previousPage)
+    spellLast.addEventListener("click", lastPage)
+    spellSchoolListing.appendChild(pageScroll)
+
+    const spellPage = document.createElement("div")
+    spellSchoolListing.appendChild(spellPage)
+
+    /////experimental
+    let list = spells;
+    let pageList = new Array();
+    let currentPage = 1;
+    let numberPerPage = 8;
+    let numberOfPages = 1;
+
+    function getNumberOfPages() {
+      return Math.ceil(list.length / numberPerPage);
+    }
+
+    function load(){
+      loadList();
+    }
+
+    function nextPage() {
+      console.log("hi")
+      currentPage += 1;
+      loadList();
+    }
+
+    function previousPage() {
+      currentPage -= 1;
+      loadList();
+    }
+
+    function firstPage() {
+      currentPage = 1;
+      loadList();
+    }
+
+    function lastPage() {
+      currentPage = numberOfPages;
+      loadList();
+    }
+
+    function loadList() {
+      let begin = ((currentPage - 1) * numberPerPage);
+      let end = begin + numberPerPage;
+
+      pageList = list.slice(begin, end);
+      drawList();
+      check();
+    }
+
+    function drawList() {
+        spellPage.innerHTML = "";
+        for (r = 0; r < pageList.length; r++) {
+          addSpell(pageList[r])
+        }
+    }
+
+    function addSpell(spell){
+
+      const singleSpellDiv = document.createElement("div")
+      singleSpellDiv.className = "ui raised segment"
+
+      const spellNameHeader = document.createElement("h3")
+      spellNameHeader.className = "ui header"
+      spellNameHeader.innerText = `${spell.name}`
+      singleSpellDiv.appendChild(spellNameHeader)
+
+      const spellInfo = document.createElement("p")
+      spellInfo.innerHTML = `
+      Level: ${spell.level}<br>
+      ${spell.range} <br>
+      ${spell.casting_time} <br>
+      Duration: ${spell.duration}<br>
+      Components: ${spell.components} <br>
+      ${spell.desc}
+      `
+      singleSpellDiv.appendChild(spellInfo)
+      spellPage.appendChild(singleSpellDiv)
+    }
+
+    function check() {
+      // spellNext.disabled = currentPage == numberOfPages ? true : false;
+      // spellPrev.disabled = currentPage == 1 ? true : false;
+      // spellFirst.disabled = currentPage == 1 ? true : false;
+      // spellLast.disabled = currentPage == numberOfPages ? true : false;
+    }
+
+    load();
+      //////////
+  }
+
+
+    body.appendChild(spellSchoolDiv);
 }
