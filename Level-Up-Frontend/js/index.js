@@ -8,6 +8,9 @@ newCampaignButton.addEventListener('click', createCampaign);
 const existingCampaignsButton = document.getElementById('existing-campaigns-button');
 existingCampaignsButton.addEventListener('click', listCampaigns);
 
+const newCharacterButton = document.getElementById('new-character-button');
+newCharacterButton.addEventListener('click', characterFormPage)
+
 const compendiumBtn = document.getElementById('compendium');
 compendiumBtn.addEventListener('click', toggleCompendium);
 
@@ -192,10 +195,6 @@ function displayClass(charClass){
 
   classProfItems.forEach(listClassProficiency)
   classShowPage.appendChild(classProfDiv)
-
-  //writes the spellbook segment
-
-
 
   body.appendChild(classShowPage)
 }
