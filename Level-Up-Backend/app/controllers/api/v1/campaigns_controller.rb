@@ -2,9 +2,11 @@ class Api::V1::CampaignsController < ApplicationController
 
   def index
     @campaigns = Campaign.all.map do |campaign|
-      {id: campaign.id,
-      name: campaign.name,
-      plot_notes: campaign.plot_notes}
+      {
+        id: campaign.id,
+        name: campaign.name,
+        plot_notes: campaign.plot_notes
+      }
     end
     render json: @campaigns
   end
@@ -20,6 +22,16 @@ class Api::V1::CampaignsController < ApplicationController
 
   def show
     @campaign = Campaign.all.find(params[:id])
+    @campaign.characters.map do |character|
+      {
+        id: character.id,
+        name: character.name,
+        bio: character.bio,
+        level: character.level,
+        char_class: character.char_class.name,
+        race: character.race.name
+      }
+    end
     render json: @campaign
   end
 

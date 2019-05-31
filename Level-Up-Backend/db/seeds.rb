@@ -6,32 +6,32 @@
 # Please allow up to 10 minutes for the seed file to run
 
 # Delete and reset all seeded classes
-# ClassSpell.destroy_all
-# Proficiency.destroy_all
-# AbilityScore.destroy_all
-# Race.destroy_all
-# Trait.destroy_all
-# RaceTrait.destroy_all
-# CharClass.destroy_all
-# Subclass.destroy_all
-# ClassProficiency.destroy_all
-# Spell.destroy_all
-# ClassProficiencyChoice.destroy_all
-#
-#
-# Proficiency.reset_pk_sequence
-# AbilityScore.reset_pk_sequence
-# Race.reset_pk_sequence
-# Trait.reset_pk_sequence
-# RaceTrait.reset_pk_sequence
-# CharClass.reset_pk_sequence
-# Subclass.reset_pk_sequence
-# ClassProficiency.reset_pk_sequence
-# Spell.reset_pk_sequence
-# ClassSpell.reset_pk_sequence
-# ClassProficiencyChoice.reset_pk_sequence
-#
-#
+ClassSpell.destroy_all
+Proficiency.destroy_all
+AbilityScore.destroy_all
+Race.destroy_all
+Trait.destroy_all
+RaceTrait.destroy_all
+CharClass.destroy_all
+Subclass.destroy_all
+ClassProficiency.destroy_all
+Spell.destroy_all
+ClassProficiencyChoice.destroy_all
+
+
+Proficiency.reset_pk_sequence
+AbilityScore.reset_pk_sequence
+Race.reset_pk_sequence
+Trait.reset_pk_sequence
+RaceTrait.reset_pk_sequence
+CharClass.reset_pk_sequence
+Subclass.reset_pk_sequence
+ClassProficiency.reset_pk_sequence
+Spell.reset_pk_sequence
+ClassSpell.reset_pk_sequence
+ClassProficiencyChoice.reset_pk_sequence
+
+
 # Define base URL
 url = "http://www.dnd5eapi.co/api"
 
@@ -102,6 +102,7 @@ n = 0
 end
 
 
+# Create campaigns
 Campaign.destroy_all
 Campaign.reset_pk_sequence
 
@@ -136,6 +137,7 @@ Character.reset_pk_sequence
 CharacterProficiencyChoice.reset_pk_sequence
 Skill.reset_pk_sequence
 
+
 # Create character proficiencies
 def create_proficiencies(new)
   proficiency_choice_types = new.char_class.class_proficiency_choices.map(&:proficiency_type).uniq
@@ -152,6 +154,7 @@ def create_proficiencies(new)
     end
   end
 end
+
 
 # Create skills
 def create_skills(new)
@@ -191,12 +194,13 @@ def create_skills(new)
   Skill.create(character: new, athletics: athletics, acrobatics: acrobatics, sleight_of_hand: sleight_of_hand, stealth: stealth, arcana: arcana, history: history_s, investigation: investigation, nature: nature, religion: religion, animal_handling: animal_handling, insight: insight, medicine: medicine, perception: perception, survival: survival, deception: deception, intimidation: intimidation, performance: performance, persuasion: persuasion)
 end
 
-# Create characters
-32.times do
+
+# Create characters (1 of 2)
+16.times do
   # Create character
   ability_score = AbilityScore.create(strength: rand(9)+8, dexterity: rand(9)+8, constitution: rand(9)+9, intelligence: rand(9)+8, wisdom: rand(9)+8, charisma: rand(9)+8)
   char_class = CharClass.all.sample
-  new = Character.create(name: Faker::Games::WorldOfWarcraft.unique.hero, level: rand(12)+3, bio: Faker::Books::Dune.unique.quote, ability_score: ability_score, race: Race.all.sample, char_class: char_class, subclass: Subclass.all.find {|x| x.char_class == char_class}, campaign: rand(8)+1 == 1 ? nil : Campaign.all.length > 0 ? Campaign.all.sample : nil)
+  new = Character.create(name: Faker::Games::WorldOfWarcraft.unique.hero, level: rand(12)+3, bio: Faker::Books::Dune.unique.quote, ability_score: ability_score, race: Race.all.sample, char_class: char_class, subclass: Subclass.all.find {|x| x.char_class == char_class})
 
   # Add race bonuses
   str_bonus = new.race.ability_bonuses[1].to_i
@@ -221,10 +225,11 @@ end
   create_skills(new)
 end
 
-48.times do
+# Create characters (2 of 2)
+23.times do
   ability_score = AbilityScore.create(strength: rand(9)+8, dexterity: rand(9)+8, constitution: rand(9)+9, intelligence: rand(9)+8, wisdom: rand(9)+8, charisma: rand(9)+8)
   char_class = CharClass.all.sample
-  new = Character.create(name: Faker::Games::ElderScrolls.unique.name, level: rand(12)+3, bio: Faker::Books::Dune.unique.quote, ability_score: ability_score, race: Race.all.sample, char_class: char_class, subclass: Subclass.all.find {|x| x.char_class == char_class}, campaign: rand(8)+1 == 1 ? nil : Campaign.all.length > 0 ? Campaign.all.sample : nil)
+  new = Character.create(name: Faker::Games::ElderScrolls.unique.name, level: rand(12)+3, bio: Faker::Books::Dune.unique.quote, ability_score: ability_score, race: Race.all.sample, char_class: char_class, subclass: Subclass.all.find {|x| x.char_class == char_class})
 
   # Add race bonuses
   str_bonus = new.race.ability_bonuses[1].to_i
@@ -249,8 +254,30 @@ end
   create_skills(new)
 end
 
-#
-# # TO DO: Add equipment, race proficiencies, languages
+# THE LEGEND #
+1.times do
+  char_class = CharClass.all[11]
+  ability_score = AbilityScore.create(strength: 22, dexterity: 27, constitution: 56, intelligence: 4, wisdom: 99, charisma: 900)
+  theLegendPB = Character.create(name: "Paul Blart the Magnificent", level: 21, bio: "Safety never takes a holiday.\n\nGino, your end is nigh;", ability_score: ability_score, race: Race.all[4], char_class: char_class, subclass: Subclass.all.find {|x| x.char_class == char_class})
+
+  create_proficiencies(theLegendPB)
+  create_skills(theLegendPB)
+end
+
+# Create character - campaign associations
+Character.all.each do |character|
+  dice_roll = rand(8)+1
+  campaign = dice_roll == 1 ? nil : Campaign.all.length > 0 ? Campaign.all.sample : nil
+  unless campaign == nil
+    CharacterCampaign.create(character: character, campaign: campaign)
+  end
+end
+
+
+
+
+
+# # TO DO: Add equipment, race proficiencies, languages, character spells
 # # Seed Equipment
 # o = 0
 # 256.times do

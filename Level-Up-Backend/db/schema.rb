@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_30_025235) do
+ActiveRecord::Schema.define(version: 2019_05_30_182010) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,15 @@ ActiveRecord::Schema.define(version: 2019_05_30_025235) do
     t.text "info"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "character_campaigns", force: :cascade do |t|
+    t.bigint "character_id"
+    t.bigint "campaign_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campaign_id"], name: "index_character_campaigns_on_campaign_id"
+    t.index ["character_id"], name: "index_character_campaigns_on_character_id"
   end
 
   create_table "character_proficiencies", force: :cascade do |t|
@@ -78,12 +87,10 @@ ActiveRecord::Schema.define(version: 2019_05_30_025235) do
     t.bigint "race_id"
     t.bigint "char_class_id"
     t.bigint "subclass_id"
-    t.bigint "campaign_id"
     t.text "equipment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["ability_score_id"], name: "index_characters_on_ability_score_id"
-    t.index ["campaign_id"], name: "index_characters_on_campaign_id"
     t.index ["char_class_id"], name: "index_characters_on_char_class_id"
     t.index ["race_id"], name: "index_characters_on_race_id"
     t.index ["subclass_id"], name: "index_characters_on_subclass_id"
@@ -203,6 +210,8 @@ ActiveRecord::Schema.define(version: 2019_05_30_025235) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "character_campaigns", "campaigns"
+  add_foreign_key "character_campaigns", "characters"
   add_foreign_key "character_proficiencies", "characters"
   add_foreign_key "character_proficiencies", "proficiencies"
   add_foreign_key "character_proficiency_choices", "characters"
@@ -210,7 +219,6 @@ ActiveRecord::Schema.define(version: 2019_05_30_025235) do
   add_foreign_key "character_spells", "characters"
   add_foreign_key "character_spells", "spells"
   add_foreign_key "characters", "ability_scores"
-  add_foreign_key "characters", "campaigns"
   add_foreign_key "characters", "char_classes"
   add_foreign_key "characters", "races"
   add_foreign_key "characters", "subclasses"

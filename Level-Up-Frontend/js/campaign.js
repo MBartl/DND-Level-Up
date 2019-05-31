@@ -26,7 +26,7 @@ function listCampaigns() {
 function listEachCampaign(campaign) {
   campaignTable = document.getElementById('campaign-table')
   if (campaignCell % 3 == 0) {
-    addRowToTable(campaignTable, campaignCell)
+    addRowToTable(campaignTable, campaignCell, 3)
   }
   campaignCell += 1
   currentCell = document.getElementById(`cell${campaignCell}`)
@@ -168,8 +168,7 @@ function campaignHomePage(campaign) {
   <h3>Characters:</h3>`;
 
   addCharacterBtn = body.querySelector('.ui.primary.button')
+  addCharacterBtn.addEventListener('click', fetchUnassigned)
 
-  createCharacterTable()
-
-  fetchCharacters(campaign);
+  goToCharacters(campaign.id);
 }
