@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
-      resources :campaigns, only: [:index, :show, :create]
+      resources :campaigns, only: [:index, :show, :create, :update]
       resources :characters, only: [:index]
       resources :races, only: [:index, :show]
       resources :ability_scores, only: [:show, :create]

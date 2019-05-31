@@ -14,9 +14,6 @@ compendiumBtn.addEventListener('click', toggleCompendium);
 const currentBtn = document.getElementById('current-campaign');
 currentBtn.addEventListener('click', currentCampaignBtn);
 
-const charactersBtn = document.getElementById('characters');
-charactersBtn.addEventListener('click', checkCampaignCharacters)
-
 //// Utility functions ////
 
 // Adds row to table when number passes a multiple of 3
@@ -75,16 +72,12 @@ function scaleTextArea() {
 function currentCampaignBtn() {
   if (currentCampaign) {
     campaignHomePage(currentCampaign);
-  };
-};
-
-// Current Campaign Characters button
-function checkCampaignCharacters() {
-  if (currentCampaign) {
-    clearBody();
-    createCharacterTable();
-    currentCampaign.characters.forEach(displayCharacter);
-  };
+  }
+  else {
+    h3 = document.createElement('h3')
+    h3.innerText = "Make a new campaign or choose from our existing campaigns first."
+    body.appendChild(h3)
+  }
 };
 
 // Toggles compendium options
@@ -398,7 +391,6 @@ function displaySpells(spells, spellSchool){
     }
 
     function nextPage() {
-      console.log("hi")
       currentPage += 1;
       loadList();
     }

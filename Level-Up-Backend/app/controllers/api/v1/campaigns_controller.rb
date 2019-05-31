@@ -21,7 +21,7 @@ class Api::V1::CampaignsController < ApplicationController
   end
 
   def show
-    @campaign = Campaign.all.find(params[:id])
+    find_campaign
     @campaign.characters.map do |character|
       {
         id: character.id,
@@ -35,8 +35,19 @@ class Api::V1::CampaignsController < ApplicationController
     render json: @campaign
   end
 
+  def update
+    find_campaign
+    @campaign.update(campaign_params)
+    render json: @campaign
+  end
+
   private
   def campaign_params
     params.require(:campaign).permit(:name, :plot_notes)
   end
+
+  def find_campaign
+    @campaign = Campaign.all.find(params[:id])
+  end
+
 end

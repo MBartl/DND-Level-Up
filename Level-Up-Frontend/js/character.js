@@ -63,7 +63,7 @@ function displayCharacter(character) {
   // editBtn.addEventListener('click', () => {console.log(character)});
 
   let remove = card.querySelector('button.ui.red.button')
-  remove.addEventListener('click', (e) => removeFromCampaign(e, character));
+  remove.addEventListener('click', () => removeFromCampaign(character));
 };
 
 // Create cell for previous function
@@ -87,7 +87,7 @@ function displayFreeCharacter(character) {
   table.appendChild(card)
 
   let add = card.querySelector('.ui.right.floated.primary.button')
-  add.addEventListener('click', (e) => addToCampaign(e, character));
+  add.addEventListener('click', () => addToCampaign(character));
 };
 
 // HTML for character card
@@ -140,7 +140,7 @@ function addFreeCharacterDivHTML(div, character) {
   `;
 }
 
-function removeFromCampaign(e, character) {
+function removeFromCampaign(character) {
   let character_campaign = character.character_campaign[0];
 
   characters = characters.filter((x) => !(x == character))
@@ -158,7 +158,7 @@ function removeFromCampaign(e, character) {
     });
 }
 
-function addToCampaign(e, character) {
+function addToCampaign(character) {
 
   fetch(URL + '/character_campaigns', {
     method: 'POST',
