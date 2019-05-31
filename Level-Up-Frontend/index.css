@@ -29,6 +29,7 @@ div.page{
   margin-bottom: 40px;
   padding-top: 85px;
 }
+
 .ui.button {
   padding: 1em;
 }
@@ -40,6 +41,29 @@ div.page{
 .ui.visible.thin.sidebar:hover, .ui.visible.thin.sidebar:focus{
    overflow-y: scroll;
 }
+.column.textpanel {
+  position: relative;
+  padding-top: 2em;
+}
+.column.textpanel img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.column.textpanel input {
+  position: absolute;
+  top: 88px;
+  left: 88px;
+  height: 24px;
+  width: 240px;
+  background-color: rgba(255,255,255,0.5);
+  border-color: lightblue;
+  border-width: thin;
+}
+.column.textpanel input:focus {
+  outline-color: red;
+}
+
 #header {
   height: 5rem;
   position: fixed;
@@ -78,4 +102,7 @@ div.page{
 #name-button:hover, #name-button:active {
   cursor: default;
   background-color: initial;
+}
+#option {
+  width: 30px;
 }

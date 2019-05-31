@@ -179,6 +179,59 @@ function characterFormPage(character) {
   clearBody()
 
   characterForm = document.createElement('form')
+  createCharacterFormHTML(character, characterForm)
+
+  const classOptions = ["Barbarian", "Bard", "Cleric", "Druid", "Fighter", "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard"]
+  classScroll = characterForm.querySelector('#class-scroll')
+  addClassOptions(classScroll, classOptions)
 
   body.appendChild(characterForm)
+}
+
+function createCharacterFormHTML(character, form) {
+  form.innerHTML = `
+  <div class="ui segment" style="height: 25%;">
+    <div class="ui two column very relaxed grid">
+      <div class="column textpanel" style="padding-top: 2em;">
+        <image src="charactersheet.png">
+        <input id="charNameField"></input>
+      </div>
+      <div class="column" style="text-align: center;">
+        <h3>Class:</h3>
+        <div id=class-scroll></div>
+        <br>
+        <h3>Race:</h3>
+        <div id=race-scroll></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function addClassOptions(scroll, options) {
+  let picker = 0
+  const currentOption = options[picker]
+
+  scroll.innerHTML = `
+  <button class="right toggle"><i class="angle double left icon"></i></button>
+  <span id="option">${currentOption}</span>
+  <button class="left toggle"><i class="angle double right icon"></i></button>`;
+
+  scroll.querySelector('.right.toggle').addEventListener('click', (e) => {
+    e.preventDefault()
+    picker -= 1;
+    if (picker < 0) {picker = 0}
+    updateOption(picker);
+  });
+
+  scroll.querySelector('.left.toggle').addEventListener('click', (e) => {
+    e.preventDefault()
+    picker += 1;
+    if (picker > 11) {picker = 11};
+    updateOption(picker);
+  });
+
+  function updateOption(picker) {
+    scroll.querySelector('#option').innerText = options[picker]
+  }
+
 }
