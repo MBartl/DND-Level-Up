@@ -39,8 +39,8 @@ function listEachCampaign(campaign) {
   createCampaignDivHtml(div, campaign)
 
   div.querySelector('.ui.green.button').addEventListener('click', () => fetchCampaignDetails(campaign));
-  div.querySelector('.ui.blue.button').addEventListener('click', () => console.log(event.target));
-  div.querySelector('.ui.red.button').addEventListener('click', () => console.log(event.target));
+  div.querySelector('.ui.blue.button').addEventListener('click', () => updateCampaignDesc(campaign));
+  div.querySelector('.ui.red.button').addEventListener('click', () => alert("Please don't delete me!"));
 
   currentCell.appendChild(div);
   scaleTextArea()
@@ -161,14 +161,36 @@ function campaignHomePage(campaign) {
     <th class="one wide">
       <button class="ui primary button">Add Character</button>
       <br>
-      <button class="ui button">Save Description</button></th>
+      <button class="ui button save">Save Description</button></th>
     </tr>
   </thead>
   </table>
   <h3>Characters:</h3>`;
 
-  addCharacterBtn = body.querySelector('.ui.primary.button')
+  addCharacterBtn = body.querySelector('button.ui.primary.button')
   addCharacterBtn.addEventListener('click', fetchUnassigned)
 
+  saveDescBtn = body.querySelector('button.ui.button.save')
+  saveDescBtn.addEventListener('click', () => updateCampaignDesc(campaign))
+
   goToCharacters(campaign.id);
+}
+
+function updateCampaignDesc(campaign) {
+  let card = event.target.parentElement.parentElement.parentElement
+  let textarea = card.querySelector('textarea')
+  let plot_notes = textarea.value
+
+  fetch(URL + `/campaigns/${campaign.id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify({campaign: {plot_notes}})
+  }).then(res => res.json())
+    .then(doc => {
+      textarea.value = doc.plot_notes
+      alert("Description Saved!")
+    })
 }
