@@ -1,6 +1,10 @@
 body {
   z-index: 10;
 }
+body:focus {
+  border-width: 2px;
+  border-color: red;
+}
 tr {
   vertical-align: top;
 }
@@ -17,7 +21,7 @@ div.ui.card.character {
   height: 200px;
 }
 span.race.compendium, span.class.compendium, span.spell.compendium {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   padding-left: 1.6em;
 }
 div.page{
@@ -29,10 +33,12 @@ div.page{
   padding: 1em;
 }
 .ui.visible.thin.sidebar {
-  font-size: 0.95em;
+  font-size: 0.92em;
   margin-top: 5rem!important;
   width: 12em;
-  overflow-y: scroll;
+}
+.ui.visible.thin.sidebar:hover, .ui.visible.thin.sidebar:focus{
+   overflow-y: scroll;
 }
 #header {
   height: 5rem;
@@ -47,10 +53,29 @@ div.page{
   margin-top: 7.5em;
   margin-left: 14rem;
 }
+#char-edit {
+  font-size: 0.9em;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 16px;
+  padding-bottom: 15px;
+}
 #char-remove {
   font-size: 0.8em;
   padding-left: 8px;
   padding-right: 8px;
   padding-top: 16px;
   padding-bottom: 16px;
+}
+#new-campaign-button, #existing-campaigns-button, #new-character-button {
+  width: 150px;
+}
+#name-button {
+  text-align: center;
+  margin-top: 0.6em;
+  margin-bottom: 0.6em;
+}
+#name-button:hover, #name-button:active {
+  cursor: default;
+  background-color: initial;
 }

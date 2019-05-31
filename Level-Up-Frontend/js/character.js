@@ -59,8 +59,8 @@ function displayCharacter(character) {
   createCharacterCell(character, characterTable, card);
   addCharacterDivHtml(card, character);
 
-  // let editBtn = card.querySelector('.ui.secondary.button');
-  // editBtn.addEventListener('click', () => {console.log(character)});
+  let editBtn = card.querySelector('.ui.secondary.button');
+  editBtn.addEventListener('click', () => characterFormPage(character));
 
   let remove = card.querySelector('button.ui.red.button')
   remove.addEventListener('click', () => removeFromCampaign(character));
@@ -106,7 +106,7 @@ function addCharacterDivHtml(card, character) {
   </div>
   <div class="extra content">
     <div class="left floated button">
-    <!-- <button class="ui secondary button">Edit</button> -->
+    <button class="ui secondary button" id="char-edit">Edit</button>
     <button class="ui red button" id="char-remove">Remove</button>
     </div>
     <div class="right floated author">
@@ -175,6 +175,10 @@ function addToCampaign(character) {
 }
 
 
-// function createCharacter() {
-//
-// }
+function characterFormPage(character) {
+  clearBody()
+
+  characterForm = document.createElement('form')
+
+  body.appendChild(characterForm)
+}
