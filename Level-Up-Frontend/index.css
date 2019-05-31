@@ -17,7 +17,7 @@ div.ui.card.character {
   height: 200px;
 }
 span.race.compendium, span.class.compendium {
-  font-size: 0.9rem;
+  font-size: 0.9em;
   padding-left: 1.6em;
 }
 div.page{
@@ -29,9 +29,9 @@ div.page{
   padding: 1em;
 }
 .ui.visible.thin.sidebar {
-  font-size: 0.95rem;
+  font-size: 0.95em;
   margin-top: 5rem!important;
-  width: 12rem;
+  width: 12em;
   overflow-y: scroll;
 }
 #header {
