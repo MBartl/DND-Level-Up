@@ -396,7 +396,7 @@ function displaySpells(spells, spellSchool){
       loadList();
     }
 
-    function previousPage(numberOfPages) {
+    function previousPage() {
       currentPage -= 1;
       if (currentPage < 1) {
         currentPage = 1
@@ -409,7 +409,7 @@ function displaySpells(spells, spellSchool){
       loadList();
     }
 
-    function lastPage(numberOfPages) {
+    function lastPage() {
       currentPage = numberOfPages;
       loadList();
     }

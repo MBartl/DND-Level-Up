@@ -253,10 +253,12 @@ function addClassOptions(scroll, options) {
     updateOption(picker);
   });
 
+  let max = options.length-1
+
   scroll.querySelector('.left.toggle').addEventListener('click', (e) => {
     e.preventDefault()
     picker += 1;
-    if (picker > 11) {picker = 11};
+    if (picker > max) {picker = max};
     updateOption(picker);
   });
 
@@ -282,25 +284,25 @@ function addStatsBox(statsBox) {
 
   statsBox.innerHTML = `
   <div class="column textpanel" style="font-size: 17;">
-  <div>
-  Strength:<div class='stat'>${strength}</div>
-  <br>
-  Dexterity:<div class='stat'>${dexterity}</div>
-  </div>
-  </div>
-  <div class="column textpanel" style="font-size: 17;">
-  <div>
-  Constitution:<div class='stat'>${constitution}</div>
-  <br>
-  Intelligence:<div class='stat'>${intelligence}</div>
-  </div>
+    <div>
+      Strength:<div class='stat'>${strength}</div>
+      <br>
+      Dexterity:<div class='stat'>${dexterity}</div>
+    </div>
   </div>
   <div class="column textpanel" style="font-size: 17;">
-  <div>
-  Wisdom:<div class='stat'>${wisdom}</div>
-  <br>
-  Charisma:<div class='stat'>${charisma}</div>
+    <div>
+      Constitution:<div class='stat'>${constitution}</div>
+      <br>
+      Intelligence:<div class='stat'>${intelligence}</div>
+    </div>
   </div>
+  <div class="column textpanel" style="font-size: 17;">
+    <div>
+      Wisdom:<div class='stat'>${wisdom}</div>
+      <br>
+      Charisma:<div class='stat'>${charisma}</div>
+    </div>
   </div>
   `;
 }
